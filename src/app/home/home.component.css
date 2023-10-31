@@ -1,0 +1,64 @@
+.home-container {
+    text-align: center;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .home-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .home-subtitle {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .home-search-field {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-bottom: 3rem;
+  }
+  
+  .popular-cities {
+    margin-top: 3rem;
+  }
+  
+  .city-card {
+    display: inline-block;
+    width: 200px;
+    margin: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+  
+  .city-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .city-image-container {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+  }
+  
+  .city-card img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .post-rental-btn {
+    margin-top: 3rem;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .city-card {
+      width: 100%;
+      margin: 1rem 0;
+    }
+  }
+  

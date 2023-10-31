@@ -83,7 +83,7 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
                 const expirationDate = new Date (now.getTime() + expireDuration * 1000) ;
                 console.log("Token expiry date"+expirationDate)
                 this.saveAuthData(token, expirationDate, this.userId)
-                this.router.navigate(['/']);
+                this.router.navigate(['/list']);
             }
         },error =>{
             this.authStatusListener.next(false);

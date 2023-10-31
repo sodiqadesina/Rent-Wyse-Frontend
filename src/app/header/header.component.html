@@ -1,6 +1,8 @@
 <mat-toolbar color="primary" class="custom-toolbar">
     <div class="container">
-        <span><a routerLink="/"><img src="../../assets/rent-wyse-logo.svg" alt="Logo" class="logo"></a></span>
+        <span *ngIf="userIsAuth"><a routerLink="/list"><img src="../../assets/rent-wyse-logo.svg" alt="Logo" class="logo"></a></span>
+        <span *ngIf="!userIsAuth"><a routerLink="/"><img src="../../assets/rent-wyse-logo.svg" alt="Logo" class="logo"></a></span>
+
         
         <span class="spacer"></span>
         <ul class="nav-list">

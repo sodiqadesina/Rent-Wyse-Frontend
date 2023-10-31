@@ -1,0 +1,25 @@
+<div class="home-container">
+    <h1 class="home-title">Looking For A Place To Rent In Ontario?</h1>
+    <h2 class="home-subtitle">We Are Here To Help!</h2>
+  
+    <mat-form-field class="home-search-field">
+      <mat-label>Search City, Neighbourhood, Address</mat-label>
+      <input matInput>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  
+    <div class="popular-cities">
+      <h3>Popular Cities</h3>
+      <h4>Find Your Next Apartment in Ontario</h4>
+  
+      <a class="city-card" *ngFor="let city of ['Toronto', 'Mississauga', 'Brampton']" [routerLink]="['/city', city.toLowerCase()]">
+        <div class="city-image-container">
+          <img [src]="'assets/' + city.toLowerCase() + '.png'" alt="{{ city }}">
+        </div>
+        <p>{{ city }}</p>
+      </a>
+    </div>
+  
+    <button mat-raised-button color="primary" class="post-rental-btn">Post a Rental</button>
+  </div>
+  
