@@ -1,0 +1,40 @@
+<mat-card>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <form [formGroup]="form" (submit)="onAddPost()" *ngIf="!isLoading">
+        <mat-form-field>
+            <input matInput type="text" formControlName="title" placeholder="Title">
+            <mat-error *ngIf="form.get('title')?.invalid">Please enter a post title</mat-error>
+        </mat-form-field>
+
+        <div>
+            <button mat-stroked-button type="button" (click)="filePicker.click()">Pick Images (Up to 10)</button>
+            <input type="file" name="image" #filePicker (change)="onImagePicked($event)" multiple>
+            <div class="image-preview" *ngFor="let img of imagePreview">
+                <img [src]="img" [alt]="form.value.title">
+            </div>
+        </div>
+
+        <mat-form-field>
+            <textarea matInput rows="6" formControlName="content" placeholder="Content"></textarea>
+            <mat-error *ngIf="form.get('content')?.invalid">Please enter post content</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput type="text" formControlName="city" placeholder="City">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" formControlName="address" placeholder="Address">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" formControlName="province" placeholder="Province">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" formControlName="zipcode" placeholder="Zipcode">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" formControlName="country" placeholder="Country">
+        </mat-form-field>
+
+        <button mat-raised-button color="accent" type="submit">Save Post</button><br>
+    </form>
+</mat-card>

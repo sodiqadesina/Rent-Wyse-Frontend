@@ -1,5 +1,15 @@
 # RentWyse
 
+- Created auth, error, header, posts, asset, environments and footer folders.
+
+- In the Auth we handle user login and sign up
+
+- In error we are handling error from the backend and displaying it on the screen
+
+- In Post we are handling posts from the backend
+
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/` and make sure the backend is running on http://localhost:5500 or change in the environment.ts file
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.0.
 
 ## Development server

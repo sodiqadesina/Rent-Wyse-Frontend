@@ -1,0 +1,58 @@
+.custom-toolbar {
+    background: #000000;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* you can adjust this */
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.logo {
+    width: 150px;  /* or any preferred width */
+    height: auto;
+}
+
+
+.nav-list {
+    display: flex;
+    gap: 10px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-icon {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .nav-list {
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #2E2E2E;
+        flex-direction: column;
+        width: 200px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+    }
+    
+    .nav-list.active {
+        transform: translateX(0);
+    }
+
+    .menu-icon {
+        display: block;
+    }
+}
