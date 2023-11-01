@@ -13,11 +13,12 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class PostListComponent implements OnInit, OnDestroy {
   posts: post[] = [];
-  
+  currentImageIndices: { [postId: string]: number } = {};
+
   private postsSub!: Subscription;
   totalPosts = 10;
   isLoading = false;
-  postPerPage =2;
+  postPerPage = 5;
   currentPage = 1;
   pageSizeOptions = [1,2,5,10]
   private authStatusSub!: Subscription;
@@ -45,6 +46,24 @@ ngOnInit(){
     console.log(this.userId)
   })
 }
+
+
+previousImage(postId: string) {
+    if (this.currentImageIndices[postId] > 0) {
+        this.currentImageIndices[postId]--;
+    }
+}
+
+nextImage(postId: string, maxIndex: number) {
+    if (!this.currentImageIndices[postId]) {
+        this.currentImageIndices[postId] = 0;
+    }
+    if (this.currentImageIndices[postId] < maxIndex - 1) {
+        this.currentImageIndices[postId]++;
+    }
+}
+
+
 
 
 onChangePage(pageData: PageEvent){

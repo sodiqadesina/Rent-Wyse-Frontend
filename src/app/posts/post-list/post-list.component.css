@@ -28,3 +28,32 @@ mat-spinner{
 mat-paginator{
     margin-top: 16px;
 }
+
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    height: auto;
+}
+
+.slider-container img {
+    width: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+button[mat-icon-button] {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+button[mat-icon-button]:nth-child(2) {
+    left: 0;
+}
+
+button[mat-icon-button]:nth-child(3) {
+    right: 0;
+}
+

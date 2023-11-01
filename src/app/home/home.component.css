@@ -70,6 +70,9 @@
     }
   } */
 
+  .fs-x{
+    font-size: 60px;
+  }
   .post-btn{
     margin: 80px;
     display: flex;
@@ -135,6 +138,64 @@
     color: #000000;
 }
 
+
+
+  /* SEARCH BAR */
+  .search-bar {
+    width: 50%; /* You can adjust this width */
+    /* margin: 0 auto; */
+    position: relative;
+    background-color: black; /* This will set the background color of the search bar to black */
+    border-radius: 20px; /* Give some rounded corners */
+    padding: 5px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .input-group-text {
+   /* Set icon color to white */
+   background-color: black;
+   border: none;
+   
+  }
+  
+  .input-group input{
+    border: none;
+  }
+
+  .form-control {
+    height: 50px; /* adjust height as needed */
+    border-radius: 0;
+    font-size: 1.2rem; /* font size for input */
+    /* border-color: #d1d1d1; */
+    background-color: black; /* Set input field background to black */
+    color: white; /* Set font color to white */
+  }
+
+.input-group-prepend{
+    display: flex;
+}
+
+  mat-icon{
+    color: white;
+    /* font-size: 30px; */
+  }
+  
+  /* Change placeholder color to a lighter shade */
+  .form-control::placeholder {
+    color: white;
+  }
+  
+  /* Add box-shadow to the search bar on focus */
+  .form-control:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    background-color: black;
+    color: white;
+  }
+  
+
+
+
+/*  */
 .popular-cities a {
 text-decoration: none;
 color: #000000;
@@ -157,10 +218,16 @@ color: #000000;
         width: 100%;
     }
 
+    .fs-x{
+        font-size: xx-large;
+      }
 
-    .house-container{
-        display: none;
+    
+    .house-container {
+        /* width: 100px;  /* Adjust width as necessary */
+        /* height: 100px; Adjust height as necessary */ 
+        background-image: none;
+        
     }
-
 
 }

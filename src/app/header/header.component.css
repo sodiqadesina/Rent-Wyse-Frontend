@@ -4,6 +4,10 @@
     width: 100%;
 }
 
+mat-toolbar{
+    height: 100%;
+}
+
 .cont {
     display: flex;
     justify-content: space-between;

@@ -13,6 +13,7 @@ app-root {
 
 app-header {
     flex-shrink: 0;
+    height: 80px;
 }
 
 main {
@@ -32,3 +33,7 @@ app-home{
     height: 100%;
 }
 
+app-post-list{
+    width: 80%;
+    margin: auto;
+  }

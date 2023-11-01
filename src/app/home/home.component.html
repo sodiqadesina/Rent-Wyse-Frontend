@@ -1,22 +1,29 @@
 <div class=" home-container  d-flex flex-column justify-content-between">
     
     <div class="post-btn">
-        <a routerLink="/create" class="btn btn-primary mb-3 post-rental-btn">Post a Rental</a>
+        <a routerLink="/create" class="btn badge text-wrap  mb-3 post-rental-btn">Post a Rental</a>
     </div>
     
     <div class="house-container">
         <div class="intro-text mb-5">
-            <h1 class="home-title">Looking For A Place To Rent In Ontario?</h1>
-            <h2 class="home-subtitle">We Are Here To Help!</h2>
+            <h1 class="home-title px-5 fs-x text-start">Looking For A Place To Rent In Ontario?</h1>
+            <h1 class="home-subtitle fs-x px-5 py-3 text-start">We Are Here To Help!</h1>
         </div>
         
-        <div class="search-section mb-5">
-            <mat-form-field class="home-search-field">
-                <mat-label>Search City, Address</mat-label>
-                <input matInput>
+     
+    <div class="text-start px-5 m-5">
+    <div class="search-bar">
+        <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text  border-right-0">
                 <mat-icon matSuffix>search</mat-icon>
-            </mat-form-field>
+            </span>
         </div>
+        <input type="text" class="form-control border-left-0" placeholder="Search City, Neighbourhood, Address" aria-label="Search" aria-describedby="basic-addon1">
+        </div>
+    </div>
+    </div>
+
     
         <div class="popular-cities-section">
             <h3>Popular Cities</h3>
