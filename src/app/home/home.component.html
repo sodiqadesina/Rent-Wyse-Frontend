@@ -1,26 +1,36 @@
-<div class="home-container">
-    <button mat-raised-button color="primary" class="post-rental-btn">Post a Rental</button>
+<div class=" home-container  d-flex flex-column justify-content-between">
     
-    <h1 class="home-title">Looking For A Place To Rent In Ontario?</h1>
-    <h2 class="home-subtitle">We Are Here To Help!</h2>
-  
-    <mat-form-field class="home-search-field">
-      <mat-label>Search City, Neighbourhood, Address</mat-label>
-      <input matInput>
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  
-    <div class="popular-cities">
-      <h3>Popular Cities</h3>
-      <h4>Find Your Next Apartment in Ontario</h4>
-  
-      <a class="city-card" *ngFor="let city of ['Toronto', 'Mississauga', 'Brampton']" [routerLink]="['/city', city.toLowerCase()]">
-        <p>{{ city }}</p>
-        <div class="city-image-container">
-          <img [src]="'../../assets/' + city.toLowerCase() + '.svg'" alt="{{ city }}">
-        </div>
-      </a>
+    <div class="post-btn">
+        <a routerLink="/create" class="btn btn-primary mb-3 post-rental-btn">Post a Rental</a>
     </div>
-  
-  </div>
-   
+    
+    <div class="house-container">
+        <div class="intro-text mb-5">
+            <h1 class="home-title">Looking For A Place To Rent In Ontario?</h1>
+            <h2 class="home-subtitle">We Are Here To Help!</h2>
+        </div>
+        
+        <div class="search-section mb-5">
+            <mat-form-field class="home-search-field">
+                <mat-label>Search City, Address</mat-label>
+                <input matInput>
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div>
+    
+        <div class="popular-cities-section">
+            <h3>Popular Cities</h3>
+            <h4>Find Your Next Apartment in Ontario</h4>
+        </div>
+    </div>
+    
+    <div class="row popular-cities ">
+        <div class="col-md-4 mb-4" *ngFor="let city of ['Toronto', 'Mississauga', 'Brampton']">
+            <a class="city-card d-block text-center p-4 h-100" [routerLink]="['/city', city.toLowerCase()]">
+                <p>{{ city }}</p>
+                <img [src]="'../../assets/' + city.toLowerCase() + '.svg'" alt="{{ city }}" class="img-fluid mb-3">
+            </a>
+        </div>
+    </div>
+    
+</div>

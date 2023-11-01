@@ -1,13 +1,13 @@
 <mat-toolbar color="primary" class="custom-toolbar">
-    <div class="container">
-        <span *ngIf="userIsAuth"><a routerLink="/list"><img src="../../assets/rent-wyse-logo.svg" alt="Logo" class="logo"></a></span>
-        <span *ngIf="!userIsAuth"><a routerLink="/"><img src="../../assets/rent-wyse-logo.svg" alt="Logo" class="logo"></a></span>
+    <div class="cont" >
+        <span ><a routerLink="/"><img src="../../assets/rent-wyse-logo.svg" alt="Logo" class="logo"></a></span>
+        <!-- <span *ngIf="!userIsAuth"><a routerLink="/"><img src="../../assets/rent-wyse-logo.svg" alt="Logo" class="logo"></a></span> -->
 
         
         <span class="spacer"></span>
         <ul class="nav-list">
             <li *ngIf="userIsAuth">
-                <a mat-button routerLink="/create" routerLinkActive="mat-accent">NewPost</a>
+                <a mat-button routerLink="/list" routerLinkActive="mat-accent">Posts</a>
             </li>
             <li *ngIf="!userIsAuth">
                 <a mat-button routerLink="/auth/login" routerLinkActive="mat-accent">Login</a>

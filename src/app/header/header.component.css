@@ -1,16 +1,17 @@
 .custom-toolbar {
     background: #000000;
     padding: 0;
+    width: 100%;
 }
 
-.container {
+.cont {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px; /* you can adjust this */
     margin: 0 auto;
     width: 100%;
     padding: 0 20px;
+    height: 15%;
 }
 
 .spacer {
