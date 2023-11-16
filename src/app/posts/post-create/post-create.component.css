@@ -20,6 +20,14 @@ button{
     margin-bottom: 30px;
 }
 
+button[mat-raised-button] {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: black;
+    color: aliceblue;
+}
+
 
 
 input[type= "file"]{
@@ -37,4 +45,10 @@ input[type= "file"]{
     border: 1px solid #ddd; /* Optional: Adds a border to each image */
     border-radius: 5px; /* Optional: Rounds the corners of the image */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .pick-btn{
+        width: 100%;
+    }
 }

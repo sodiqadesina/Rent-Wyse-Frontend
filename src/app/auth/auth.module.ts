@@ -3,9 +3,12 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AngularMaterialModule } from "../angular-material.module";
 import { CommonModule } from "@angular/common";
-import {  FormsModule } from '@angular/forms';
+import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthRoutingModule } from "./auth-routing.module";
-
+import { ConfirmationDialogComponent } from "./signup/confirmation-dialog.component";
+import { SettingsComponent } from './settings/settings.component';
+import { ConfirmationDialogComponent1 } from "./settings/confirmation-dialog.component";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 
 
@@ -13,12 +16,18 @@ import { AuthRoutingModule } from "./auth-routing.module";
 @NgModule({
     declarations: [
          LoginComponent,
-        SignupComponent,],
+        SignupComponent,
+        ConfirmationDialogComponent,
+        ConfirmationDialogComponent1,
+        SettingsComponent,
+    ],
         imports: [
             CommonModule,
             AngularMaterialModule,
             FormsModule,
-            AuthRoutingModule
+            ReactiveFormsModule,
+            AuthRoutingModule,
+            FlexLayoutModule
         ]
 })
 export class AuthModule {}

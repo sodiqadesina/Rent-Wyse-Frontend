@@ -1,0 +1,67 @@
+/* messages.component.css */
+.messages-list {
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column; 
+
+}
+  .message-item {
+    display: flex;
+    align-items: flex-end; /* Align items to the bottom of the flex container */
+    margin-bottom: 10px;
+  }
+  
+  .message-item.other-user {
+    justify-content: flex-end; /* Align other users' messages to the right */
+  }
+  
+  .message-bubble {
+    display: flex;
+    align-items: flex-end; /* Align the content and timestamp to the bottom */
+    padding: 10px;
+    border-radius: 8px;
+    margin: 5px;
+    max-width: 70%;
+    background-color: #e0e0e0; /* Light gray for sender */
+    position: relative;
+  }
+  
+  .message-bubble.receiver {
+    background-color: black;
+    color: white;
+    justify-content: flex-end; /* Align receiver's message content to the right */
+  }
+  
+  .message-content {
+    padding-right: 10px; /* Space between message content and timestamp */
+  }
+  
+  .message-timestamp {
+    font-size: 0.75em;
+    color: #6c757d; /* A shade of gray */
+    white-space: nowrap;
+  }
+  
+  .active, .list-group-item.active {
+    background-color: black !important;
+    border-color: black !important;
+    color: white !important; /* Ensure the text is readable on the black background */
+  }
+  
+  button[mat-raised-button] {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: black;
+    color: aliceblue;
+  }
+  
+  .message-form {
+    margin-top: 20px;
+  }
+  
+  .full-width-input {
+    width: 100%;
+  }
+  

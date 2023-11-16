@@ -1,10 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AuthData } from "./auth-data.model"
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { Router } from "@angular/router";
 import { environment } from '../../environments/environment';
 import { LoadingService } from "../loading.service";
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from "./signup/confirmation-dialog.component";
+import { SocketService } from '../notification/socket.service';
+
 const BACKEND_URL =    environment.apiUrl   + '/user/';
 
 @Injectable({providedIn: "root"})
@@ -18,7 +22,7 @@ export class AuthService{
     private authStatusListener = new Subject<boolean>();
     private tokenTimer!:  number;
     private userId!: any;
-constructor(private http: HttpClient, private router: Router, private loadingService: LoadingService){}
+constructor(private http: HttpClient, private router: Router, public dialog: MatDialog, public socketService: SocketService, ){}
 
   
     createUser(
@@ -40,11 +44,42 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
             phone: phone
         };
         this.http.post(BACKEND_URL + "/signup", authData).subscribe(() => {
+            // Open the dialog
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+
+        // After the user clicks 'OK', redirect to the login page
+        dialogRef.afterClosed().subscribe(() => {
             this.router.navigate(["/auth/login"]);
+        });
         }, error => {
             this.authStatusListener.next(false)
         });
     }
+
+    getUserDetails(): Observable<any> {
+        // Using the userId that you already have after login to make the request
+        const userId = this.getUserId(); 
+        if (!userId) {
+          throw new Error('User ID not found');
+        }
+        return this.http.get<any>(BACKEND_URL + "getUserDetails/" + userId);
+      }
+
+      updateUserDetails(userId: string, userDetails: any): Observable<any>{ 
+
+        return this.http.put<any>(BACKEND_URL + "updateUser/" + userId, userDetails);
+        
+      }
+    
+      changePassword(userId: string, currentPassword: string, newPassword: string): Observable<any> {
+        const url = `${BACKEND_URL}/updatePassword/${userId}`;
+        const body = {
+          currentPassword: currentPassword,
+          newPassword: newPassword
+        };
+        return this.http.put(url, body);
+      }
+    
     
 
     getAuthStatusListener(){
@@ -56,7 +91,7 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
     }
 
     getUserId(){
-        return this.userId;
+        return  this.userId
     }
 
     getToken(){// 
@@ -67,7 +102,7 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
     login(username: string, password:string){
         const authData: AuthData = {username: username, password: password, email: ""}
 
-        this.http.post<{token: string, expiresIn: number, userId: string}>(BACKEND_URL+ "/login", authData).subscribe(response =>{
+        this.http.post<{token: string, expiresIn: number, userId: string}>(BACKEND_URL+ "login", authData).subscribe(response =>{
             console.log('Auth Service res'+response)
             const token = response.token
             this.token = token;
@@ -83,11 +118,12 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
                 const expirationDate = new Date (now.getTime() + expireDuration * 1000) ;
                 console.log("Token expiry date"+expirationDate)
                 this.saveAuthData(token, expirationDate, this.userId)
-                this.router.navigate(['/list']);
+                this.router.navigate(['/']);
+                this.socketService.connect(this.userId); // connecting to the socket server on login
             }
         },error =>{
             this.authStatusListener.next(false);
-            console.log("auth is false", error)
+            console.log("auth failed...err = ", error)
         })
     }
 
@@ -106,8 +142,10 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
             this.userId = authInfo.userId;
             this.setAuthTimer(expiresIn / 1000)
             this.authStatusListener.next(true)
+                // Reconnecting to the WebSocket server when the page refreshes and we use autoAuthUser
+            this.socketService.connect(this.userId);
         }
-        // note you have to call this in the app.component.ts
+        
     }
 
 
@@ -121,6 +159,8 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
         clearTimeout(this.tokenTimer);
         this.clearAuthData();
         this.userId = null;
+        this.socketService.disconnect();
+        //this.socketService.disconnectMessageListener();
         this.router.navigate(['/']);
     
     }
@@ -141,7 +181,7 @@ constructor(private http: HttpClient, private router: Router, private loadingSer
     private clearAuthData(){
         localStorage.removeItem('token');
         localStorage.removeItem('expiration');
-        localStorage.removeItem('userIdn');
+        localStorage.removeItem('userId');
     }
 
     private getAuthData(){ // we are using this to get items stored in the local storage 

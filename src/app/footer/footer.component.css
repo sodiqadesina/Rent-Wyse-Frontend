@@ -1,17 +1,17 @@
 .footer-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 20px;
-    background-color: #000; /* Adjust based on your design preference */
+    background-color: #000; 
     color: #fff;
   }
   
   .footer-section {
-    width: 30%; /* Adjust based on your design preference */
+    width: 30%; 
   }
   
   .footer-section h3 {
-    border-bottom: 2px solid #fff; /* Adjust based on your design preference */
+    /* border-bottom: 2px solid #fff; */
     padding-bottom: 10px;
   }
   

@@ -21,12 +21,15 @@ mat-form-field {
 
 .btn {
     text-align: center;
+    width: 100%;
 }
 
 button[mat-raised-button] {
     padding-left: 2rem;
     padding-right: 2rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: black;
+    color: aliceblue;
 }
 
 .mat-form-field.mat-focused .mat-form-field-underline .mat-form-field-ripple {

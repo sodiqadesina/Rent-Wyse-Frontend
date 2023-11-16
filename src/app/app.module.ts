@@ -14,9 +14,10 @@ import { PostsModule } from './posts/posts.module';
 import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
-
-
+import { MessagingModule } from './messaging/messaging.module';
+import { NotificationComponent } from './notification/notification.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HeaderComponent,
     ErrorComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AngularMaterialModule,
     PostsModule,
     NgbModule,
-
+    MessagingModule,
+    MatSnackBarModule,
+    MatBadgeModule,
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}

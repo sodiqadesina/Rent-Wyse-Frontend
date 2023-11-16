@@ -19,9 +19,14 @@ export class PostCreateComponent implements OnInit, OnDestroy {
     post: any;
     isLoading = false; // for the spinner
     form: any;
+    propertyTypes = ['Flat', 'Apartment', 'House', 'Town House'];
+    rentTypes = ['Entire Apartment', 'Room with private washroom', 'Room with shared washroom', 'Room on sharing basis'];
+    
     imagePreview: any;
     private mode = 'create';
     private authStatusSub!: Subscription;
+
+    
 
     constructor(public postsService: PostsService, public route: ActivatedRoute, private authService: AuthService){}
 
@@ -31,13 +36,21 @@ export class PostCreateComponent implements OnInit, OnDestroy {
         })
         this.form = new FormGroup({
             title: new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
-            content: new FormControl(null, {validators: [Validators.required]}),
+            description: new FormControl(null, {validators: [Validators.required]}),
             image: new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]}),
-            city: new FormControl(null),
-            address: new FormControl(null),
-            province: new FormControl(null),
+            bedroomNumber: new FormControl(null, {validators: [Validators.required]}),
+            bathroomNumber: new FormControl(null, {validators: [Validators.required]}),
+            typeOfProperty: new FormControl(null, {validators: [Validators.required]}),
+            furnished: new FormControl(false),
+            parkingAvailable: new FormControl(false),
+            rentType: new FormControl(null, {validators: [Validators.required]}),
+            dateListed: new FormControl(null, {validators: [Validators.required]}),
+            dateAvailableForRent: new FormControl(null, {validators: [Validators.required]}),
+            city: new FormControl(null, {validators: [Validators.required]}),
+            address: new FormControl(null, {validators: [Validators.required]}),
+            province: new FormControl(null, {validators: [Validators.required]}),
             zipcode: new FormControl(null, {validators: [Validators.required]}),
-            country: new FormControl(null)
+            country: new FormControl(null, {validators: [Validators.required]}),
         });
             
         this.route.paramMap.subscribe((paramMap: ParamMap) =>{

@@ -5,14 +5,18 @@ import { PostCreateComponent } from './posts/post-create/post-create.component';
 
 import { AuthGuard } from './auth/auth-guard';
 import { HomeComponent } from './home/home.component';
+import { MessagesComponent } from './messaging/messages/messages.component';
+
+
 
 const routes: Routes = [
   {path: '',component: HomeComponent},
   {path: 'list',component: PostListComponent},
   {path: 'create',component: PostCreateComponent, canActivate: [AuthGuard]}, // using the AuthGuard to protect the route
   {path: 'edit/:postId',component: PostCreateComponent, canActivate: [AuthGuard]},
-  {path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)} // Lazy loading the auth routes 
-
+  {path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)} ,// Lazy loading the auth routes 
+  {path: 'message', component: MessagesComponent, canActivate: [AuthGuard]},
+  { path: 'messages/:conversationId', component: MessagesComponent,canActivate: [AuthGuard] },
 ];
 
 @NgModule({

@@ -7,7 +7,7 @@
         </mat-form-field>
 
         <div>
-            <button mat-stroked-button type="button" (click)="filePicker.click()">Pick Images (Up to 10)</button>
+            <button mat-stroked-button type="button" class="pick-btn text-wrap" (click)="filePicker.click()">Pick Images (Up to 10)</button>
             <input type="file" name="image" #filePicker (change)="onImagePicked($event)" multiple>
             <div class="image-preview d-flex flex-row flex-wrap" >
                 <img *ngFor="let img of imagePreview" [src]="img" class="img-thumbnail" [alt]="form.value.title">
@@ -35,6 +35,6 @@
             <input matInput type="text" formControlName="country" placeholder="Country">
         </mat-form-field>
 
-        <button mat-raised-button color="accent" type="submit">Save Post</button><br>
+        <button mat-raised-button  type="submit">Save Post</button><br>
     </form>
 </mat-card>

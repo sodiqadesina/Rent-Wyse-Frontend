@@ -1,0 +1,55 @@
+<!-- messages.component.html -->
+<div class="container mt-4">
+    <div class="row">
+        <!-- Conversations List -->
+        <div class="col-md-4">
+            <div class="list-group">
+                <a *ngFor="let conversation of conversations" 
+                class="list-group-item list-group-item-action"
+                [class.active]="selectedConversation?._id === conversation._id"
+                (click)="selectConversation(conversation); markConversationAsRead(conversation._id)">
+                Conversation with {{ conversation.otherParticipantUsername }}
+                <span style="padding-left: 10px; " *ngIf="conversation.unreadCount > 0"
+                      matBadge="{{ conversation.unreadCount }}"
+                      matBadgeColor="warn"
+                      [matBadgeHidden]="conversationReadStatus[conversation._id]">
+                </span>
+              </a>                          
+            </div>
+            <p class="info-text mat-body-1" *ngIf="!conversations.length && !isLoading">No conversations</p>
+        </div>
+
+        <!-- Messages Display -->
+        <div class="col-md-8">
+            <div *ngIf="selectedConversation">
+                <h3>Messages</h3>
+                <!-- messages.component.html -->
+                <mat-card>
+                    <mat-spinner *ngIf="isLoading"></mat-spinner>
+                    <div class="messages-list" #messagesContainer *ngIf="!isLoading">
+                      <div *ngFor="let message of selectedConversationMessages" 
+                          [ngClass]="{'message-item': true, 'other-user': message.sender._id !== currentUserId}">
+                        <div [ngClass]="{'message-bubble': true, 
+                                         'sender': message.sender._id === currentUserId, 
+                                         'receiver': message.sender._id !== currentUserId}">
+                          <span class="message-content">{{ message.sender.username }}: {{ message.content }}</span>
+                          <span class="message-timestamp">{{ formatDate(message.createdAt) }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card>
+         
+                <!-- Message Input Form -->
+                <mat-card>
+                <form [formGroup]="messageForm" (ngSubmit)="onSendMessage()" class="message-form">
+                    <mat-form-field appearance="outline" class="full-width-input">
+                        <textarea matInput placeholder="Type a message..." formControlName="content"></textarea>
+                    </mat-form-field>
+                    <button mat-raised-button  type="submit" [disabled]="messageForm.invalid || isLoading">Send</button>
+                </form>
+            </mat-card>
+            </div>
+            <p class="info-text mat-body-1" *ngIf="!selectedConversation && !isLoading">Select a conversation to view messages</p>
+        </div>
+    </div>
+</div>

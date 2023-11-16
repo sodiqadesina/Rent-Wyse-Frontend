@@ -1,63 +1,59 @@
 <mat-card>
-    <!-- Display loading spinner when isLoading is true -->
     <mat-spinner *ngIf="isLoading"></mat-spinner>
-    
-    <form (submit)="onSignup(signupForm)" #signupForm='ngForm' *ngIf="!isLoading">
+    <form [formGroup]="signupForm" (ngSubmit)="onSignup()" *ngIf="signupForm">
         <div fxLayout="column" fxLayoutGap="20px">
-
             <mat-form-field appearance="outline">
                 <mat-label>E-mail</mat-label>
-                <input matInput type="email" name="email" ngModel required email #emailInput = "ngModel" >
-                <mat-hint>Enter a valid email address</mat-hint>
-                <mat-error *ngIf="emailInput.invalid">Please enter a valid email</mat-error>
+                <input matInput type="email" formControlName="email">
+                <mat-error *ngIf="signupForm.get('email')?.errors?.['required']">Email is required</mat-error>
+                <mat-error *ngIf="signupForm.get('email')?.errors?.['email']">Enter a valid email</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Username</mat-label>
-                <input matInput type="text" name="username" ngModel required #usernameInput = "ngModel" >
-                <mat-error *ngIf="usernameInput.invalid">Please enter a valid username</mat-error>
+                <input matInput type="text" formControlName="username">
+                <mat-error *ngIf="signupForm.get('username')?.errors?.['required']">Username is required</mat-error>
             </mat-form-field>
-
 
             <mat-form-field appearance="outline">
                 <mat-label>Password</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'" name="password" ngModel required #passwordInput =  "ngModel" >
-                <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
-                    <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-                </button>
-                <mat-hint>Minimum 8 characters</mat-hint>
-                <mat-error *ngIf="passwordInput.invalid">Please enter a valid password</mat-error>
+                <input matInput type="password" formControlName="password">
+                <mat-error *ngIf="signupForm.get('password')?.errors?.['required']">Password is required</mat-error>
+                <mat-error *ngIf="signupForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters long</mat-error>
             </mat-form-field>
-            
+
+            <mat-form-field appearance="outline">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput type="password" formControlName="confirmPassword">
+                <mat-error *ngIf="signupForm.get('confirmPassword')?.errors?.['required']">Confirm password is required</mat-error>
+                <mat-error *ngIf="signupForm.errors?.['passwordMismatch']">Passwords do not match</mat-error>
+            </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>First Name</mat-label>
-                <input matInput type="text" name="firstName" ngModel>
+                <input matInput type="text" formControlName="firstName">
+                <mat-error *ngIf="signupForm.get('firstName')?.errors?.['required']">First name is required</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Last Name</mat-label>
-                <input matInput type="text" name="lastName" ngModel>
+                <input matInput type="text" formControlName="lastName">
+                <mat-error *ngIf="signupForm.get('lastName')?.errors?.['required']">Last name is required</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Address</mat-label>
-                <textarea matInput name="address" ngModel></textarea>
+                <textarea matInput formControlName="address"></textarea>
             </mat-form-field>
 
-            <mat-form-field>
-                <input matInput type="tel" name="phone" ngModel placeholder="Phone Number" 
-                       #phoneInput="ngModel"  pattern="^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$">
-                <mat-error *ngIf="phoneInput.invalid">
-                    Please enter a valid Canadian phone number.
-                </mat-error>
+            <mat-form-field appearance="outline">
+                <mat-label>Phone</mat-label>
+                <input matInput type="tel" formControlName="phone">
+                <mat-error *ngIf="signupForm.get('phone')?.errors?.['required']">Phone number is required</mat-error>
+                <mat-error *ngIf="signupForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number</mat-error>
             </mat-form-field>
-            
 
-        </div>
-
-        <div class="btn" fxLayoutAlign="center">
-            <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Signup</button>
+            <button mat-raised-button color="primary" type="submit" >Sign Up</button>
         </div>
     </form>
 </mat-card>

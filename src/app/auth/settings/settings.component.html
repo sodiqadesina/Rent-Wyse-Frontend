@@ -1,0 +1,149 @@
+<!-- settings.component.html -->
+<div class="container mt-4">
+    <div class="row">
+      <!-- Settings Options -->
+      <div class="col-md-4">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action"
+            *ngFor="let section of settingsSections" 
+            [class.active]="section === selectedSection"
+            (click)="selectSection(section); $event.preventDefault()">
+           {{ section }}
+         </a>         
+        </div>
+      </div>
+
+   <!-- Settings Form -->
+   <div class="col-md-8">
+    <!-- User Information Form -->
+    <div *ngIf="selectedSection === 'User Information'">
+      <h3>User Information</h3>
+      <mat-card>
+        <!-- Display loading spinner when isLoading is true -->
+        <div class="uploader-status">
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+        </div>
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+            <div fxLayout="column" fxLayoutGap="20px">
+      
+                <mat-form-field appearance="fill">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput formControlName="email" readonly>
+                </mat-form-field>
+      
+                <mat-form-field appearance="fill">
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="username" readonly>
+                    <mat-error *ngIf="userForm.get('username')?.invalid">Please enter a valid username</mat-error>
+                </mat-form-field>
+      
+                <mat-form-field appearance="fill">
+                    <mat-label>First Name</mat-label>
+                    <input matInput formControlName="firstName">
+                </mat-form-field>
+      
+                <mat-form-field appearance="fill">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput formControlName="lastName">
+                </mat-form-field>
+      
+                <mat-form-field appearance="fill">
+                    <mat-label>Address</mat-label>
+                    <textarea matInput formControlName="address"></textarea>
+                </mat-form-field>
+      
+                <mat-form-field appearance="fill">
+                    <mat-label>Phone</mat-label>
+                    <input matInput formControlName="phone" placeholder="Phone Number">
+                    <mat-error *ngIf="userForm.get('phone')?.invalid">
+                        Please enter a valid phone number.
+                    </mat-error>
+                </mat-form-field>
+      
+            </div>
+      
+            <div class="btn" fxLayoutAlign="center">
+                <button mat-raised-button color="accent" type="submit">Update</button>
+            </div>
+        </form>
+
+              
+        <!-- Always visible Password Change Form -->
+        <form class="pt-4" [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" *ngIf="!isLoading">
+      <!-- Current Password Field -->
+      <mat-form-field appearance="outline">
+        <mat-label>Current Password</mat-label>
+        <input matInput [type]="hideCurrentPassword ? 'password' : 'text'" formControlName="currentPassword">
+        <button mat-icon-button matSuffix (click)="toggleCurrentPasswordVisibility()" type="button">
+          <mat-icon>{{ hideCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <!-- New Password Field -->
+      <mat-form-field appearance="outline">
+        <mat-label>New Password</mat-label>
+        <input matInput [type]="hideNewPassword ? 'password' : 'text'" formControlName="newPassword">
+        <button mat-icon-button matSuffix (click)="toggleNewPasswordVisibility()" type="button">
+          <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <!-- Confirm New Password Field -->
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm New Password</mat-label>
+        <input matInput [type]="hideConfirmNewPassword ? 'password' : 'text'" formControlName="confirmNewPassword">
+        <button mat-icon-button matSuffix (click)="toggleConfirmNewPasswordVisibility()" type="button">
+          <mat-icon>{{ hideConfirmNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+
+
+    <div class="btn" fxLayoutAlign="center">
+      <button mat-raised-button color="accent" type="submit">Change Password</button>
+    </div>
+  </form>
+        
+      </mat-card>
+      
+    </div>
+  
+  
+        <!-- ... -->
+        <div class="col-md-8">
+            <!-- User Information Form -->
+            <div *ngIf="selectedSection === 'Privacy Settings'">
+              <h3>Privacy Settings</h3>
+              <form>
+                <!-- Form fields go here -->
+                <div class="mb-3">
+
+                </div>
+                <!-- Add other fields similarly, disable email as needed -->
+                <!-- ... -->
+                
+                <!-- Submit button or other controls -->
+                <!-- ... -->
+              </form>
+            </div>
+        <!-- ... -->
+        <div class="col-md-8">
+            <!-- User Information Form -->
+            <div *ngIf="selectedSection === 'Account Preferences'">
+              <h3>Account Preferences</h3>
+              <form>
+                <!-- Form fields go here -->
+                <div class="mb-3">
+                  
+                </div>
+                <!-- Add other fields similarly, disable email as needed -->
+                <!-- ... -->
+                
+                <!-- Submit button or other controls -->
+                <!-- ... -->
+              </form>
+            </div>
+      </div>
+    </div>
+  </div>
+  

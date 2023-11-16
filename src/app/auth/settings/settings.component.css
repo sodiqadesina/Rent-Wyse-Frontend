@@ -1,0 +1,35 @@
+/* Add this to your settings.component.css */
+mat-form-field {
+    width: 100%; /* Makes each input field take full width */
+    display: block; /* Each field will be on its own row */
+
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: flex-end; 
+    margin-top: 20px;
+  }
+
+  mat-card{
+    padding: 20px;
+  }
+  
+  button[mat-raised-button] {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: black;
+    color: aliceblue;
+}
+
+/* Add this to your settings.component.css */
+.active, .list-group-item.active {
+    background-color: black !important;
+    border-color: black !important;
+    color: white !important; /* Ensure the text is readable on the black background */
+  }
+  
+  .uploader-status ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #000000;
+}

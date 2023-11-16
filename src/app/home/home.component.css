@@ -142,7 +142,7 @@
 
   /* SEARCH BAR */
   .search-bar {
-    width: 50%; /* You can adjust this width */
+    width: 70%; /* You can adjust this width */
     /* margin: 0 auto; */
     position: relative;
     background-color: black; /* This will set the background color of the search bar to black */
@@ -196,6 +196,10 @@
 
 
 /*  */
+
+.popular-c{
+font-size: 50px;
+}
 .popular-cities a {
 text-decoration: none;
 color: #000000;
@@ -229,5 +233,15 @@ color: #000000;
         background-image: none;
         
     }
+
+    .search-bar {
+        width: 100%; /* You can adjust this width */
+        /* margin: 0 auto; */
+        position: relative;
+        background-color: black; /* This will set the background color of the search bar to black */
+        border-radius: 20px; /* Give some rounded corners */
+        padding: 5px;
+        font-family: 'Arial', sans-serif;
+      }
 
 }

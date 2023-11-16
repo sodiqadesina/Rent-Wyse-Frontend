@@ -4,6 +4,8 @@ import { PostsService } from '../posts.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from 'src/app/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InquiryDialogComponent } from '../../messaging/Inquiry-dialog/inquiry-dialog.component';
 
 
 @Component({
@@ -25,7 +27,8 @@ export class PostListComponent implements OnInit, OnDestroy {
   userIsAuth = false;
   userId!: any;
 
-  constructor(public postsService: PostsService, private authService: AuthService){}
+
+  constructor(public postsService: PostsService, private authService: AuthService, public dialog: MatDialog){}
 
 
 ngOnInit(){
@@ -47,6 +50,12 @@ ngOnInit(){
   })
 }
 
+openInquiryDialog(partnerId: string): void {
+  this.dialog.open(InquiryDialogComponent, {
+    width: '250px',
+    data: { partnerId }
+  });
+}
 
 previousImage(postId: string) {
     if (this.currentImageIndices[postId] > 0) {

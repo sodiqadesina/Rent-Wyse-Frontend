@@ -1,8 +1,6 @@
 import { Component , OnInit} from '@angular/core';
 import { AuthService } from './auth/auth.service';
 
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,10 +11,14 @@ export class AppComponent implements OnInit{
     throw new Error('Method not implemented.');
   }
 
-  constructor(private authService: AuthService,){} // Injecting this services into this component
-
+  constructor(private authService: AuthService,){}
  ngOnInit(){
   this.authService.autoAuthUser();
+
  }
 
+ 
+
 }
+
+

@@ -2,7 +2,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
-
+import { MessageService } from '../messaging/messaging.service';
 
 @Component({
     selector: 'app-header',
@@ -11,8 +11,10 @@ import { Subscription } from 'rxjs';
   })
   export class HeaderComponent implements OnInit, OnDestroy {
     private authListenerSubs!: Subscription ;
+    unreadMessageCount: number = 0;
     userIsAuth = false;
-    constructor(private authService: AuthService){
+
+    constructor(private authService: AuthService,private messageService: MessageService){
 
     }
 
@@ -29,14 +31,23 @@ import { Subscription } from 'rxjs';
       this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated =>{
         this.userIsAuth = isAuthenticated;
       });
+        if(this.authListenerSubs){
+          this.messageService.fetchUnreadMessageCount()
+          this.messageService.getUnreadMessageCount().subscribe(count => {
+          this.unreadMessageCount = count;
+          console.log("unreadmessage count " + count)
+          });
+        }
     }
 
     onLogout(){
+      this.messageService.fetchUnreadMessageCount()
       this.authService.logout();
     }
 
     ngOnDestroy(){
       this.authListenerSubs.unsubscribe();
+      this.messageService.fetchUnreadMessageCount()
     }
 
 

@@ -37,3 +37,28 @@ app-post-list{
     width: 80%;
     margin: auto;
   }
+
+  
+  mat-spinner{
+    margin: auto;
+    stroke: black!important;
+    color:  black!important;
+    ;
+}
+
+::ng-deep .mat-spinner circle,
+::ng-deep .mat-progress-spinner circle {
+  stroke: black !important; /* Change to any color you want */
+}::ng-deep .mat-spinner circle,
+::ng-deep .mat-progress-spinner circle {
+  stroke: black !important; /* Change to any color you want */
+}
+
+/* In your global styles.css file */
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: black !important;
+  }
+  
+  .custom-snackbar {
+    /**/
+  }
