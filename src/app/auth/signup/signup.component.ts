@@ -22,7 +22,11 @@ export class SignupComponent implements OnInit, OnDestroy {
             confirmPassword: ['', Validators.required],
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
-            address: [''],
+            address: ['', Validators.required],
+            city: ['', Validators.required],
+            province: ['', Validators.required],
+            zipcode: ['', Validators.required],
+            country: ['', Validators.required],
             phone: ['', [Validators.required, ]]
         }, { validator: PasswordValidator.match('password', 'confirmPassword') });
     }
@@ -47,6 +51,10 @@ export class SignupComponent implements OnInit, OnDestroy {
             this.signupForm.value.firstName,
             this.signupForm.value.lastName,
             this.signupForm.value.address,
+            this.signupForm.value.city,
+            this.signupForm.value.province,
+            this.signupForm.value.zipcode,
+            this.signupForm.value.country,
             this.signupForm.value.phone
         )
     }

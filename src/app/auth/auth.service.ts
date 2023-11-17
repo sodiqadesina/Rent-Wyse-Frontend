@@ -32,7 +32,11 @@ constructor(private http: HttpClient, private router: Router, public dialog: Mat
         firstName?: string,
         lastName?: string,
         address?: string,
-        phone?: string
+        city?: string,
+        province?: string,
+        zipcode?: string,
+        country?: string,
+        phone?: number
     ) {
         const authData: AuthData = {
             username: username,
@@ -41,6 +45,10 @@ constructor(private http: HttpClient, private router: Router, public dialog: Mat
             firstName: firstName,
             lastName: lastName,
             address: address,
+            city: city,
+            province: province,
+            zipcode: zipcode,
+            country: country,
             phone: phone
         };
         this.http.post(BACKEND_URL + "/signup", authData).subscribe(() => {

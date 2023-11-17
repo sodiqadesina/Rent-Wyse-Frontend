@@ -30,15 +30,15 @@ export class NotificationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Subscribe to the auth status to know when the user logs in or out
+    // Subscribe to the auth status to know when the user logs in or out this might not be necc anymore cause of the next if(this.authService.getIsAuth())
     this.authStatusSub = this.authService.getAuthStatusListener()
       .subscribe(isAuthenticated => {
         if (isAuthenticated) {
           this.userId = this.authService.getUserId();
-          this.socketService.connect(this.userId);
-          this.socketService.onNewMessage((data) => {
-            this.showNotifications(data);
-          });
+          //this.socketService.connect(this.userId);
+          // this.socketService.onNewMessage((data) => {
+          //   this.showNotifications(data);
+          // });
         } else {
           this.socketService.disconnect();
         }

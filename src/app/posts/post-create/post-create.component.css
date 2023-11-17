@@ -52,3 +52,60 @@ input[type= "file"]{
         width: 100%;
     }
 }
+
+.cdk-drag-preview {
+    border: 2px solid #3f51b5;
+    border-radius: 5px;
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+    max-width: 150px; 
+
+  }
+
+  /* Ensure the placeholder doesn't take up any space */
+.cdk-drag-placeholder {
+    display: block;
+    margin: 5px;
+    max-height: 500px;
+    max-width: 150px;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    max-width: 150px; 
+  }
+  
+  .img-thumbnail {
+    cursor: move; /* Indicates that the item is draggable */
+    margin: 5px;
+
+
+  }
+
+  .img-thumbnail img{
+    cursor: move; /* Indicates that the item is draggable */
+    margin: 5px;
+    max-width: 150px; 
+
+  }
+
+
+  
+  .image-preview.cdk-drop-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 100px;
+  }
+  
+
+  
+
+  .cdk-drag-preview {
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+  }
+  
+
+  

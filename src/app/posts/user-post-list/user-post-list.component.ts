@@ -9,11 +9,11 @@ import { InquiryDialogComponent } from '../../messaging/Inquiry-dialog/inquiry-d
 
 
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css']
+  selector: 'app-user-post-list',
+  templateUrl: './user-post-list.component.html',
+  styleUrls: ['./user-post-list.component.css']
 })
-export class PostListComponent implements OnInit, OnDestroy {
+export class UserPostListComponent implements OnInit, OnDestroy {
   posts: post[] = [];
   currentImageIndices: { [postId: string]: number } = {};
 
@@ -33,7 +33,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
 ngOnInit(){
   this.isLoading = true;
-  this.postsService.getPosts(this.postPerPage, this.currentPage);
+  this.postsService.getPostsByUserId(this.postPerPage, this.currentPage);
   this.userId = this.authService.getUserId();
   this.postsSub = this.postsService.getPostUpdateListener().subscribe((postData: {posts: post[], postCount: number}) => {
     this.isLoading = false;

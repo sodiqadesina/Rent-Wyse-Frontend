@@ -30,14 +30,15 @@ import { MessageService } from '../messaging/messaging.service';
       this.userIsAuth = this.authService.getIsAuth();
       this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated =>{
         this.userIsAuth = isAuthenticated;
-      });
-        if(this.authListenerSubs){
+        if(isAuthenticated){
           this.messageService.fetchUnreadMessageCount()
           this.messageService.getUnreadMessageCount().subscribe(count => {
           this.unreadMessageCount = count;
           console.log("unreadmessage count " + count)
           });
         }
+      });
+        
     }
 
     onLogout(){

@@ -1,40 +1,99 @@
 <mat-card>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     <form [formGroup]="form" (submit)="onAddPost()" *ngIf="!isLoading">
-        <mat-form-field>
-            <input matInput type="text" formControlName="title" placeholder="Title">
-            <mat-error *ngIf="form.get('title')?.invalid">Please enter a post title</mat-error>
-        </mat-form-field>
-
-        <div>
-            <button mat-stroked-button type="button" class="pick-btn text-wrap" (click)="filePicker.click()">Pick Images (Up to 10)</button>
-            <input type="file" name="image" #filePicker (change)="onImagePicked($event)" multiple>
-            <div class="image-preview d-flex flex-row flex-wrap" >
-                <img *ngFor="let img of imagePreview" [src]="img" class="img-thumbnail" [alt]="form.value.title">
+      <mat-form-field>
+        <input matInput type="text" formControlName="title" placeholder="Title">
+        <mat-error *ngIf="form.get('title')?.invalid">Please enter a post title</mat-error>
+      </mat-form-field>
+  
+      <div>
+        <button mat-stroked-button type="button" class="pick-btn text-wrap" (click)="filePicker.click()">Pick Images</button>
+        <input type="file" name="image"  #filePicker (change)="onImagePicked($event)" multiple>
+        <div class="image-preview d-flex flex-row flex-wrap" cdkDropList (cdkDropListDropped)="drop($event)">
+            <div class="img-thumbnail" *ngFor="let img of imagePreview" cdkDrag>
+              <img [src]="img" [alt]="form.value.title">
+              <button type="button" class="remove-img-btn" (click)="removeImage(img)">×</button>
             </div>
-        </div>
+          </div>
+          <mat-error *ngIf="form.get('image')?.invalid">Please upload some images</mat-error>          
+      </div>
+  
+      <mat-form-field>
+        <textarea matInput rows="6" formControlName="description" placeholder="Description"></textarea>
+        <mat-error *ngIf="form.get('description')?.invalid">Please enter post description</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="number" formControlName="bedroom" placeholder="Number of Bedrooms">
+        <mat-error *ngIf="form.get('bedroom')?.invalid">Please enter number of bedrooms</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="number" formControlName="bathroom" placeholder="Number of Bathrooms">
+        <mat-error *ngIf="form.get('bathroom')?.invalid">Please enter number of bathrooms</mat-error>
+      </mat-form-field>
 
-        <mat-form-field>
-            <textarea matInput rows="6" formControlName="content" placeholder="Content"></textarea>
-            <mat-error *ngIf="form.get('content')?.invalid">Please enter post content</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput type="text" formControlName="city" placeholder="City">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="text" formControlName="address" placeholder="Address">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="text" formControlName="province" placeholder="Province">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="number" formControlName="zipcode" placeholder="Zipcode">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="text" formControlName="country" placeholder="Country">
-        </mat-form-field>
-
-        <button mat-raised-button  type="submit">Save Post</button><br>
+      <mat-form-field>
+        <input matInput type="number" formControlName="price" placeholder="$/Month">
+        <mat-error *ngIf="form.get('price')?.invalid">Please enter a price</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-select formControlName="typeOfProperty" placeholder="Type of Property">
+          <mat-option *ngFor="let type of propertyTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-checkbox formControlName="furnished">Furnished</mat-checkbox>
+      <mat-checkbox formControlName="parkingAvailable">Parking Available</mat-checkbox>
+      
+  
+      <mat-form-field>
+        <mat-select formControlName="rentType" placeholder="Rent Type">
+          <mat-option *ngFor="let type of rentTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field *ngIf="mode === 'edit'">
+        <mat-hint >Date Listed</mat-hint>
+        <input matInput [matDatepicker]="picker" formControlName="dateListed" placeholder="Date Listed">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  
+      <mat-form-field>
+        <mat-hint *ngIf="mode === 'edit'">Date Available</mat-hint>
+        <input matInput [matDatepicker]="picker2" formControlName="dateAvailableForRent" placeholder="Date Available for Rent">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="text" formControlName="city" placeholder="City">
+        <mat-error *ngIf="form.get('city')?.invalid">Please enter a city</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="text" formControlName="address" placeholder="Address">
+        <mat-error *ngIf="form.get('address')?.invalid">Please enter an address</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="text" formControlName="province" placeholder="Province">
+        <mat-error *ngIf="form.get('province')?.invalid">Please enter a province</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="text" formControlName="zipcode" placeholder="Zipcode">
+        <mat-error *ngIf="form.get('zipcode')?.invalid">Please enter a zipcode</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="text" formControlName="country" placeholder="Country">
+        <mat-error *ngIf="form.get('country')?.invalid">Please enter a country</mat-error>
+      </mat-form-field>
+  
+      <button mat-raised-button type="submit">Save Post</button>
     </form>
-</mat-card>
+  </mat-card>
+  

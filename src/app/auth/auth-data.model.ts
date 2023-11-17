@@ -5,5 +5,9 @@
     firstName?: string;
     lastName?: string;
     address?: string;
-    phone?: string;
+    city?: string;
+    province?: string;
+    zipcode?: string;
+    country?: string;
+    phone?: number
    }

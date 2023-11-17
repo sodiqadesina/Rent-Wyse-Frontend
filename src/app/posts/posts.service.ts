@@ -1,171 +1,236 @@
-import { post } from './post.model'
-import { Subject, map } from 'rxjs'
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { response } from 'express';
+import { Subject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { post } from './post.model';
 import { environment } from '../../environments/environment';
 
+const BACKEND_URL = environment.apiUrl + '/posts/';
 
-
-
-const BACKEND_URL =    environment.apiUrl   + '/posts/';
-
-@Injectable({ providedIn: "root"})
-
-export class PostsService { 
+@Injectable({ providedIn: 'root' })
+export class PostsService {
     private posts: post[] = [];
-    private postsUpdated = new Subject<{post: post[],postCount: number}>();
+    private postsUpdated = new Subject<{ posts: post[], postCount: number }>();
 
-
-    constructor(private http: HttpClient, private router: Router){}
-
-    
+    constructor(private http: HttpClient, private router: Router) {}
 
     getPosts(postsPerPage: number, currentPage: number){
         const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
-        this.http.get<{message: string, posts: post[], maxPost:number}>(BACKEND_URL + queryParams).pipe(
-            map( postData => {
-                return {posts: postData.posts.map(post => {
-                    return {
-                        title: post.title,
-                        content: post.content,
-                        _id: post._id,
-                        imagePath: post.imagePath,  // Updated this line
-                        creator: post.creator,
-                        city: post.city,             // Add the new fields
-                        address: post.address,
-                        province: post.province,
-                        zipcode: post.zipcode,
-                        country: post.country
-                    }
-                }), maxPost: postData.maxPost}
+        this.http
+            .get<{ message: string, posts: any[], maxPost: number }>(BACKEND_URL + queryParams)
+            .pipe(map(postData => {
+                return {
+                    posts: postData.posts.map(post => {
+                        return {
+                            _id: post._id,
+                            title: post.title,
+                            description: post.description,
+                            imagePath: post.imagePath,
+                            creator: post.creator,
+                            // Add all the new fields here
+                            bedroom: post.bedroom,
+                            bathroom: post.bathroom,
+                            typeOfProperty: post.typeOfProperty,
+                            furnished: post.furnished,
+                            parkingAvailable: post.parkingAvailable,
+                            rentType: post.rentType,
+                            dateListed: post.dateListed,
+                            dateAvailableForRent: post.dateAvailableForRent,
+                            city: post.city,
+                            address: post.address,
+                            province: post.province,
+                            zipcode: post.zipcode,
+                            country: post.country,
+                            price: post.price,
+                        };
+                    }),
+                    maxPost: postData.maxPost
+                };
+            }))
+            .subscribe((postData) => {
+                console.log(postData)
+                this.posts = postData.posts;
+                this.postsUpdated.next({posts: [...this.posts], postCount: postData.maxPost});
             })
-        ).subscribe((postData) => {
-            console.log(postData)
-            this.posts = postData.posts;
-            this.postsUpdated.next({post: [...this.posts], postCount: postData.maxPost});
-        })
+        }
+
+    getPostsByUserId(postsPerPage: number, currentPage: number){
+        const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+        this.http
+            .get<{ message: string, posts: any[], maxPost: number }>(BACKEND_URL + '/user-post/ID/'+  queryParams)
+            .pipe(map(postData => {
+                return {
+                    posts: postData.posts.map(post => {
+                        return {
+                            _id: post._id,
+                            title: post.title,
+                            description: post.description,
+                            imagePath: post.imagePath,
+                            creator: post.creator,
+                            // Add all the new fields here
+                            bedroom: post.bedroom,
+                            bathroom: post.bathroom,
+                            typeOfProperty: post.typeOfProperty,
+                            furnished: post.furnished,
+                            parkingAvailable: post.parkingAvailable,
+                            rentType: post.rentType,
+                            dateListed: post.dateListed,
+                            dateAvailableForRent: post.dateAvailableForRent,
+                            city: post.city,
+                            address: post.address,
+                            province: post.province,
+                            price: post.price,
+                            zipcode: post.zipcode,
+                            country: post.country,
+                        };
+                    }),
+                    maxPost: postData.maxPost
+                };
+            }))
+            .subscribe((postData) => {
+                console.log(postData)
+                this.posts = postData.posts;
+                this.postsUpdated.next({posts: [...this.posts], postCount: postData.maxPost});
+            })
+        }
+
+    getPost(id: string): Observable<post> {
+        return this.http.get<post>(BACKEND_URL + id);
     }
 
-    getPost(id: string) {
-        return this.http.get<{
-            _id: string;
-            title: string;
-            content: string;
-            imagePath: any[]; 
-            creator: string;
-            city: string;
-            address: string;
-            province: string;
-            zipcode: number;   
-            country: string;
-        }>(BACKEND_URL + id);
-    }
-    
-
-
-    getPostUpdateListener(){
+    getPostUpdateListener() {
         return this.postsUpdated.asObservable();
     }
 
+    addPost(title: string, 
+        description: string, 
+        image: File[], 
+        bedroom: number, bathroom: number, 
+        typeOfProperty: string, furnished: boolean, 
+        parkingAvailable: boolean, rentType: string, 
+        dateListed: Date, dateAvailableForRent: Date, city: string, 
+        address: string, province: string, zipcode: string, price: number, country: string,) {
 
-    addPost(title: string, content: string, image: File[], city: string, address: string, province: string, zipcode: number, country: string) {
         const postData = new FormData();
-        postData.append("title", title);
-        postData.append("content", content);
-        
+        postData.append('title', title);
+        postData.append('description', description);
         image.forEach((file, index) => {
-            postData.append("image", file, file.name);
+          postData.append('image', file, file.name);
         });
-        postData.append("city", city);
-        postData.append("address", address);
-        postData.append("province", province);
-        postData.append("zipcode", zipcode.toString());
-        postData.append("country", country);
-        this.http.post<{message: string, post: post}>(BACKEND_URL, postData).subscribe((responseData) => {
-            
-            console.log(responseData.message, responseData.post._id);
-            // const post: post = { _id: 'null', title: title,content: content, imagePath: responseData.post.imagePath}
-           
-            // this.posts.push(post);
-  
-            this.router.navigate(["/"]); // redirecting to list route 
-        })
+        postData.append('bedroom', bedroom.toString());
+        postData.append('bathroom', bathroom.toString());
+        postData.append('typeOfProperty', typeOfProperty);
+        postData.append('furnished', furnished.toString());
+        postData.append('parkingAvailable', parkingAvailable.toString());
+        postData.append('rentType', rentType);
+        postData.append('dateListed', dateListed.toISOString());
+        postData.append('dateAvailableForRent', dateAvailableForRent.toISOString());
+        postData.append('city', city);
+        postData.append('address', address);
+        postData.append('province', province);
+        postData.append('zipcode', zipcode);
+        postData.append('price', price.toString());
+        postData.append('country', country);
+        this.http.post<{ message: string, post: any }>(BACKEND_URL, postData)
+          .subscribe(responseData => {
+
+
+
+            console.log(postData)
+            //should redirect to the user list of posts page
+            this.router.navigate(["/"]);
+          });
+      }
+
+
+
+  updatePost(
+    id: string, 
+    title: string, 
+    description: string, 
+    image: File[] , 
+    bedroom: number, 
+    bathroom: number, 
+    typeOfProperty: string, 
+    furnished: boolean, 
+    parkingAvailable: boolean, 
+    rentType: string, 
+    dateListed: Date, 
+    dateAvailableForRent: Date,
+    city: string,
+    address: string,
+    province: string,
+    zipcode: string,
+    price: number,
+    country: string,
+    creator: any
+    ){
+        let postData: FormData | post;
+    
+        if (image && image.length > 0 && typeof(image[0]) === 'object') {
+            postData = new FormData();
+            postData.append("id", id);
+            postData.append("title", description);
+    
+            if (Array.isArray(image)) {
+                image.forEach((file: File) => {
+                    (postData as FormData).append("image", file, file.name);  // Type assertion here
+                });
+            }
+            postData.append('bedroomNumber', bedroom.toString());
+            postData.append('bathroomNumber', bathroom.toString());
+            postData.append('typeOfProperty', typeOfProperty);
+            postData.append('furnished', furnished.toString());
+            postData.append('parkingAvailable', parkingAvailable.toString());
+            postData.append('rentType', rentType);
+            //postData.append('dateListed', dateListed.toISOString());
+            postData.append('dateAvailableForRent', dateAvailableForRent.toISOString());
+            postData.append("city", city);
+            postData.append("address", address);
+            postData.append("province", province);
+            postData.append("zipcode", zipcode);
+            postData.append("price", price.toString());
+            postData.append("country", country);
+        } else {
+            postData = {
+                _id: id, 
+                title: title, 
+                description: description, 
+                imagePath: image,  
+                bedroom, 
+                bathroom, 
+                typeOfProperty, 
+                furnished, 
+                parkingAvailable, 
+                rentType, 
+                dateListed, 
+                dateAvailableForRent,
+                city: city, 
+                address: address,
+                province: province,
+                zipcode: zipcode,
+                country: country,
+                price: price,
+                creator: null  
+            };
         }
-
-        updatePost(
-            id: string, 
-            title: string, 
-            content: string, 
-            image: File[] , 
-            city: string,
-            address: string,
-            province: string,
-            zipcode: string,
-            country: string,
-            creator: any
-            ){
-                let postData: FormData | post;
-            
-                if (image && image.length > 0 && typeof(image[0]) === 'object') {
-                    postData = new FormData();
-                    postData.append("id", id);
-                    postData.append("title", title);
-                    postData.append("content", content);
-            
-                    if (Array.isArray(image)) {
-                        image.forEach((file: File) => {
-                            (postData as FormData).append("image", file, file.name);  // Type assertion here
-                        });
-                    }
-            
-                    postData.append("city", city);
-                    postData.append("address", address);
-                    postData.append("province", province);
-                    postData.append("zipcode", zipcode);
-                    postData.append("country", country);
-                } else {
-                    postData = {
-                        _id: id, 
-                        title: title, 
-                        content: content, 
-                        imagePath: image,  
-                        city: city, 
-                        address: address,
-                        province: province,
-                        zipcode: zipcode,
-                        country: country,
-                        creator: null  
-                    };
-                }
-        this.http.put(BACKEND_URL + id, postData).subscribe(response =>{
-        // const updatedPosts = [...this.posts];
-        // const oldPostIndex = updatedPosts.findIndex(p => p._id === id)
-        // const post: post = {
-        //     _id:id, title: title, content: content, imagePath: ''
-        // }
-        // updatedPosts[oldPostIndex] = post;
-        // this.posts = updatedPosts;
-        this.router.navigate(["/"]); // redirecting the route
-    });
-    }
-
-    deletePost(postId: string){
-        return this.http.delete(BACKEND_URL + postId)
-    }
-
+this.http.put(BACKEND_URL + id, postData).subscribe(response =>{
+// const updatedPosts = [...this.posts];
+// const oldPostIndex = updatedPosts.findIndex(p => p._id === id)
+// const post: post = {
+//     _id:id, title: title, content: content, imagePath: ''
+// }
+// updatedPosts[oldPostIndex] = post;
+// this.posts = updatedPosts;
+this.router.navigate(["/"]); // redirecting the route
+});
 }
 
+    deletePost(postId: string) {
+        return this.http.delete(BACKEND_URL + postId);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+   
+}

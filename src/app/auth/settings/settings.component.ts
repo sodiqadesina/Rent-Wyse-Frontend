@@ -43,6 +43,10 @@ export class SettingsComponent implements OnInit {
       firstName: [''],
       lastName: [''],
       address: [''],
+      city: [''],
+      province: [''],
+      zipcode: [''],
+      country: [''],
       phone: ['']
     });
 
@@ -76,6 +80,10 @@ export class SettingsComponent implements OnInit {
           firstName: userData.firstName,
           lastName: userData.lastName,
           address: userData.address,
+          city: userData.city,
+          province: userData.province,
+          zipcode: userData.zipcode,
+          country: userData.country,
           phone: userData.phone
         });
         this.isLoading = false; // Set isLoading to false once data is loaded

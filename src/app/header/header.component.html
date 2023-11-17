@@ -17,6 +17,9 @@
                     <a mat-button routerLink="/auth/settings" routerLinkActive="mat-accent">Settings</a>
                 </li>
                 <li *ngIf="userIsAuth">
+                    <a mat-button routerLink="/my-listing" routerLinkActive="mat-accent">My Rentals</a>
+                </li>
+                <li *ngIf="userIsAuth">
                     <a mat-button routerLink="/list" routerLinkActive="mat-accent">Rentals</a>
                 </li>
             <li *ngIf="!userIsAuth">
