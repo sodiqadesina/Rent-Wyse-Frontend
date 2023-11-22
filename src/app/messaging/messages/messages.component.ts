@@ -232,9 +232,9 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
           this.conversations[conversationIndex] = { ...conversation };
     
           // If the new message belongs to the selected conversation, update the message list
-          if (this.selectedConversation && message.conversationId === this.selectedConversation._id) {
-            this.selectConversation(this.selectedConversation); // Reload message
-          }
+          // if (this.selectedConversation && message.conversationId === this.selectedConversation._id) {
+          //  this.selectConversation(this.selectedConversation); // Reload message
+          // }
         }
       });
     }
