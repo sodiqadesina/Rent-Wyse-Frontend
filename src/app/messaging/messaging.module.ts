@@ -8,6 +8,7 @@ import { RouterModule } from "@angular/router";
 import { MatListModule } from '@angular/material/list';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDatepickerModule } from "@angular/material/datepicker";
 
 @NgModule({
 declarations: [
@@ -22,6 +23,7 @@ RouterModule,
 MatListModule,
 ReactiveFormsModule,
 MatBadgeModule,
+MatDatepickerModule,
 
 ]
 

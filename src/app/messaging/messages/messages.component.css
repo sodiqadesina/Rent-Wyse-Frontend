@@ -65,3 +65,51 @@
     width: 100%;
   }
   
+
+
+  /*accordiun*/
+  .info-text{
+    text-align: center;
+}
+
+
+.post-image{
+    width:90%;
+    margin:auto;
+}
+
+.post-image img {
+    width: 100%;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+
+
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    height: auto;
+}
+
+.slider-container img {
+    width: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.post-item {
+  margin-bottom: 20px;
+}
+
+mat-icon {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+mat-expansion-panel-header-description {
+cursor: none !important;
+}
+
+.agreement {
+  text-decoration: underline; 
+}

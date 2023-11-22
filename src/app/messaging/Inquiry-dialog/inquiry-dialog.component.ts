@@ -12,7 +12,7 @@ export class InquiryDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<InquiryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { partnerId: string },
+    @Inject(MAT_DIALOG_DATA) public data: { partnerId: string, postId: string },
     private messageService: MessageService
   ) {}
 
@@ -21,7 +21,7 @@ export class InquiryDialogComponent {
 
     // Assuming that `startOrGetConversation` will handle the logic of creating a new
     // conversation if it doesn't exist, and returning its ID.
-    this.messageService.startOrGetConversation(this.data.partnerId).subscribe(conversation => {
+    this.messageService.startOrGetConversation(this.data.partnerId, this.data.postId).subscribe(conversation => {
       // Now, `conversation` should have an `_id` field which is the conversation ID.
       // The sendMessage method should require only the conversation ID and the message content.
       this.messageService.sendMessage(this.data.partnerId, this.messageContent).subscribe(() => {

@@ -1,32 +1,43 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-<div *ngIf="posts.length > 0 && !isLoading" class="post-container">
-  <mat-card class="post-item" *ngFor="let post of posts">
-    <mat-card-header>
-      <mat-card-title>{{ post.title }}</mat-card-title>
-    </mat-card-header>
-    
-    <mat-card-content fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <div fxFlex="70">
-        <div class="slider-container mb-4" *ngIf="post.imagePath.length > 0">
-          <img [src]="post.imagePath[currentImageIndices[post._id] || 0]" [alt]="post.title">
-          <button mat-icon-button (click)="previousImage(post._id)"><mat-icon>arrow_left</mat-icon></button>
-          <button mat-icon-button (click)="nextImage(post._id, post.imagePath.length)"><mat-icon>arrow_right</mat-icon></button>
-        </div>
-        <p>{{ post.description }}</p>
-        <p>Address: {{ post.address }}, {{ post.city }}, {{ post.province }}, {{ post.zipcode }}</p>
+<div *ngIf="posts.length > 0 && !isLoading" class="container">
+  <mat-accordion class="posts-accordion" multi>
+    <mat-expansion-panel *ngFor="let post of posts">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ post.title }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ post.city }}, {{ post.province }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="slider-container mb-4" *ngIf="post.imagePath.length > 0">
+        <img [src]="post.imagePath[currentImageIndices[post._id] || 0]" [alt]="post.title">
+        <button mat-icon-button (click)="previousImage(post._id)"><mat-icon>arrow_left</mat-icon></button>
+        <button mat-icon-button (click)="nextImage(post._id, post.imagePath.length)"><mat-icon>arrow_right</mat-icon></button>
       </div>
-      <div fxFlex="30">
-        <button *ngIf="userIsAuth && userId " (click)="openInquiryDialog(post.creator)" mat-raised-button color="primary" >Make an Inquiry</button>
-      </div>
-    </mat-card-content>
-    
-    <mat-card-actions *ngIf="userIsAuth && userId === post.creator">
-      <a mat-button color="primary" [routerLink]="['/edit', post._id]">Edit</a>
-      <button mat-button color="warn" (click)="onDelete(post._id)">Delete</button>
-    </mat-card-actions>
-  </mat-card>
+
+      <mat-card-content>
+        <p><mat-icon>description</mat-icon> {{ post.description }}</p>
+        <p><mat-icon>place</mat-icon> {{ post.address }}, {{ post.city }}, {{ post.province }}, {{ post.zipcode }}, {{ post.country }}</p>
+        <p><mat-icon>king_bed</mat-icon> Bedrooms: {{ post.bedroom }}</p>
+        <p><mat-icon>bathtub</mat-icon> Bathrooms: {{ post.bathroom }}</p>
+        <p><mat-icon>event</mat-icon> Listed: {{ post.dateListed | date }}</p>
+        <p><mat-icon>event_available</mat-icon> Available: {{ post.dateAvailableForRent | date }}</p>
+        <p><mat-icon>check_circle_outline</mat-icon> Furnished: {{ post.furnished ? 'Yes' : 'No' }}</p>
+        <p><mat-icon>directions_car</mat-icon> Parking: {{ post.parkingAvailable ? 'Available' : 'Not Available' }}</p>
+        <p><mat-icon>house</mat-icon> Rent Type: {{ post.rentType }}</p>
+      </mat-card-content>
+
+      <mat-card-actions *ngIf="userIsAuth && userId === post.creator">
+        <a mat-button color="primary" [routerLink]="['/edit', post._id]">Edit</a>
+        <button mat-button color="warn" (click)="onDelete(post._id)">Delete</button>
+      </mat-card-actions>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <mat-paginator [length]="totalPosts" [pageSize]="postPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangePage($event)" *ngIf="posts.length > 0"></mat-paginator>
+  <p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet.</p>
 </div>
 
-<mat-paginator [length]="totalPosts" [pageSize]="postPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangePage($event)" *ngIf="posts.length > 0"></mat-paginator>
-<p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet.</p>
+

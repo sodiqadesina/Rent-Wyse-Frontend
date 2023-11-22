@@ -26,9 +26,31 @@ updateUnreadMessageCount(count: number) {
 }
 
 
-  startOrGetConversation(partnerId: string): Observable<any> {
-    return this.http.post(`${this.BACKEND_URL}/conversations/start`, { recipientId: partnerId });
-  }
+deleteDocument(conversationId: string, filename: string) {
+  return this.http.delete(`${this.BACKEND_URL}/conversations/${conversationId}/delete-document/${filename}`);
+}
+
+// Method to download a document
+downloadDocument(filename: string) {
+  return this.http.get(`${this.BACKEND_URL}/conversations/documents/${filename}`, { responseType: 'blob' });
+}
+
+
+
+uploadDocuments(conversationId: string, documents: FormData): Observable<any> {
+  console.log(documents)
+  return this.http.post(`${this.BACKEND_URL}/conversations/${conversationId}/upload-document`, documents);
+}
+
+
+startOrGetConversation(partnerId: string, postId: string): Observable<any> {
+  return this.http.post(`${this.BACKEND_URL}/conversations/start`, { recipientId: partnerId, postId: postId });
+}
+
+setViewingDate(conversationId: string, viewingDate: Date): Observable<any> {
+  return this.http.post(`${this.BACKEND_URL}/conversations/${conversationId}/setViewingDate`, { viewingDate });
+}
+
 
   getMessagesForConversation(conversationId: string): Observable<any> {
     return this.http.get(`${this.BACKEND_URL}/conversations/${conversationId}/messages`);

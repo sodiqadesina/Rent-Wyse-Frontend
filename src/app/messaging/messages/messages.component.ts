@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SocketService } from 'src/app/notification/socket.service';
+import { docTypeValidator } from './doc-type.validator';
 
 @Component({
   selector: 'app-messages',
@@ -23,6 +24,11 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
   currentUserId = this.authService.getUserId();
   private newMessageSub!: Subscription;
   conversationReadStatus: { [conversationId: string]: boolean } = {};
+  currentImageIndex: number = 0;
+  viewingDateForm!: FormGroup;
+  viewingDateSet: boolean = false;
+  documentForm!: FormGroup;   
+  fileList: FileList | null = null;
 
   constructor(
     private messageService: MessageService,
@@ -30,7 +36,9 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
     private fb: FormBuilder, // Injecting FormBuilder
     private datePipe: DatePipe, // Injecting DatePipe here
     private route: ActivatedRoute, // Injecting ActivatedRoute here
-    private socketService: SocketService
+    private socketService: SocketService,
+    private formBuilder: FormBuilder
+
   ) {
     this.messageForm = this.fb.group({ // Initialize the form group
       content: ['', Validators.required] // Add validators as needed
@@ -49,44 +57,199 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
               this.selectConversationById(conversationId);
             }
           });
-        });
-        this.setupNewMessageListener();
+            });
+            this.setupNewMessageListener();
+            this.viewingDateForm = this.fb.group({
+              viewingDate: [null, Validators.required],
+              viewingTime: ['', Validators.required]
+            });
+            this.documentForm = this.formBuilder.group({
+              documents: [null, [docTypeValidator(['pdf', 'doc', 'docx'])]]
+            });
       }
 
-   
-      setupNewMessageListener() {
-        // Listen for new messages using the existing connection
-        this.socketService.onNewMessage((message) => {
-          // Find the conversation in the list
-          const conversationIndex = this.conversations.findIndex(c => c._id === message.conversationId);
-          if (conversationIndex > -1) {
-            // Increment the unread message count or set it to 1 if it doesn't exist
-            const conversation = this.conversations[conversationIndex];
-            conversation.unreadCount = (conversation.unreadCount || 0) + 1;
+
       
-            // Update the conversation in the list to trigger change detection
-            this.conversations[conversationIndex] = { ...conversation };
-          }
-          
-          // If the new message belongs to the selected conversation, update the message list
-          if (this.selectedConversation && message.conversationId === this.selectedConversation._id) {
-            this.selectConversation(this.selectedConversation); // Reload messages
-            // Reset the unread count for the selected conversation
-            this.resetUnreadCount(this.selectedConversation._id);
-            this.isLoading = false;
-            this.scrollToBottom();
-          }
-        });
+
+      onDeleteDocument(filename: string, documentType: 'agreementDocument' | 'signedAgreementDocument') {
+        // Call service to delete the document
+        this.messageService.deleteDocument(this.selectedConversation._id, filename)
+          .subscribe(response => {
+            // Handle successful deletion
+            console.log('Document deleted:', response);
+            // Remove the document from the UI
+            if (documentType === 'agreementDocument') {
+              this.selectedConversation.agreementDocuments = this.selectedConversation.agreementDocuments.filter((doc: string) => doc !== filename);
+            } else {
+              this.selectedConversation.signedAgreementDocuments = this.selectedConversation.signedAgreementDocuments.filter((doc: string) => doc !== filename);
+            }
+          }, error => {
+            // Handle deletion error
+            console.log(error)
+          });
       }
       
-      resetUnreadCount(conversationId: string) {
-        const conversationIndex = this.conversations.findIndex(c => c._id === conversationId);
+    
+      onDownloadDocument(filename: string) {
+        this.messageService.downloadDocument(filename)
+          .subscribe(blob => {
+            // Create a temporary link element to initiate download
+            const blobUrl = URL.createObjectURL(blob);
+            const tempLink = document.createElement('a');
+            tempLink.href = blobUrl;
+            tempLink.download = filename;
+            tempLink.click();
+            URL.revokeObjectURL(blobUrl);
+          }, error => {
+            // Handle download error
+            console.log("error downloading document - ",error)
+          });
+      }
+
+
+      
+    isUserPostCreator() {
+      return this.selectedConversation?.postId?.creator === this.currentUserId;
+  }
+
+    onSetViewingDate() {
+    if (this.viewingDateForm.valid) {
+      const date = this.viewingDateForm.get('viewingDate')?.value;
+      const time = this.viewingDateForm.get('viewingTime')?.value;
+
+      // Combine date and time
+      const viewingDate = new Date(date);
+      const [hours, minutes] = time.split(':');
+      viewingDate.setHours(hours, minutes);
+
+        if (viewingDate) {
+            this.messageService.setViewingDate(this.selectedConversation._id, viewingDate)
+                .subscribe(response => {
+                    // Handle success
+                    this.viewingDateSet = true;
+
+                    // Update the UI with the new viewing date
+                    this.updateViewingDate(this.selectedConversation._id, new Date(viewingDate));
+
+                    // Optionally, refresh other parts of the UI that depend on this data
+                    // ...
+
+                }, error => {
+                    // Handle error
+                    console.error('Error setting viewing date', error);
+                });
+        }
+    }
+  }
+
+  onFilePicked(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+    if (files && files.length > 0) {
+      this.fileList = files;
+      // Update the form with a boolean value or file names
+      // const fileNames = Array.from(files).map(file => file.name);
+      // this.documentForm.patchValue({ documents: fileNames.join(', ') });
+      // Note: Do not set the actual FileList or File object in the form control
+    }
+  }
+
+    onUploadDocuments() {
+      if (!this.fileList || this.fileList.length === 0) {
+        // Handle invalid form or no files selected
+        return;
+      }
+      const formData = new FormData();
+      for (let i = 0; i < this.fileList.length; i++) {
+        formData.append('documents', this.fileList[i]);
+      }
+      // Call your service to upload the documents
+      this.messageService.uploadDocuments(this.selectedConversation._id, formData)
+      .subscribe(response => {
+        // Handle successful upload
+        console.log('Documents uploaded successfully', response);
+         // Add the new documents to the appropriate array
+      if (this.isUserPostCreator()) {
+        this.selectedConversation.agreementDocuments.push(...response.documentPaths);
+      } else {
+        this.selectedConversation.signedAgreementDocuments.push(...response.documentPaths);
+      }
+
+      // Clear the file input
+      this.fileList = null;
+      this.documentForm.reset();
+
+      }, error => {
+        // Handle error
+        console.error('Error uploading documents', error);
+      });
+      
+    }
+
+
+    updateViewingDate(conversationId: string, newDate: Date) {
+      this.messageService.setViewingDate(conversationId, newDate).subscribe(response => {
+        // Find and update the specific conversation with the new viewing date
+        const index = this.conversations.findIndex(c => c._id === conversationId);
+        if (index !== -1) {
+          this.conversations[index].viewingDate = newDate;
+        }
+        // Optionally, refresh the selected conversation display
+        if (this.selectedConversation && this.selectedConversation._id === conversationId) {
+          this.selectConversation(this.conversations[index]);
+        }
+      }, error => {
+        console.error('Error setting viewing date', error);
+      });
+    }
+
+
+    previousImage() {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    }
+    }
+
+    nextImage(imageCount: number) {
+      if (this.currentImageIndex < imageCount - 1) {
+        this.currentImageIndex++;
+      }
+    }
+
+
+    setupNewMessageListener() {
+      this.socketService.onNewMessage((message) => {
+        const conversationIndex = this.conversations.findIndex(c => c._id === message.conversationId);
+        console.log('New message received:', message);
         if (conversationIndex > -1) {
           const conversation = this.conversations[conversationIndex];
-          conversation.unreadCount = 0;
+          
+          // Increment the unread count only if this is not the currently selected conversation
+          if (!this.selectedConversation || this.selectedConversation._id !== message.conversationId) {
+            conversation.unreadCount = (conversation.unreadCount || 0) + 1;
+          }
+    
+          // Update the conversation list to reflect new message or unread count
           this.conversations[conversationIndex] = { ...conversation };
+    
+          // If the new message belongs to the selected conversation, update the message list
+          if (this.selectedConversation && message.conversationId === this.selectedConversation._id) {
+            this.selectConversation(this.selectedConversation); // Reload message
+          }
         }
-      }
+      });
+    }
+      
+  resetUnreadCount(conversationId: string) {
+    const conversationIndex = this.conversations.findIndex(c => c._id === conversationId);
+    if (conversationIndex > -1) {
+      const conversation = this.conversations[conversationIndex];
+      conversation.unreadCount = 0;
+      this.conversations[conversationIndex] = { ...conversation };
+      this.messageService.markMessagesAsRead(conversationId).subscribe(() => {
+        this.messageService.fetchUnreadMessageCount();
+      });
+    }
+  }
       
     
       markConversationAsRead(conversationId: string) {
@@ -131,7 +294,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
     this.isLoading = true;
     const userId = this.currentUserId;
     this.messageService.getAllConversationsForUser(userId).subscribe(conversations => {
-      this.conversations = conversations.map((convo: { participants: any[]; }) => {
+      this.conversations = conversations.map((convo: { participants: any[], postId: string }) => {
         // Find the other participant's username
         const otherParticipant = convo.participants.find((participant: { _id: string; }) => participant._id !== userId);
         return { ...convo, otherParticipantUsername: otherParticipant?.username };
@@ -146,34 +309,23 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
     });
   }
   
-
   
 // messages.component.ts
-selectConversation(conversation: any) {
+  selectConversation(conversation: any) {
     this.selectedConversation = conversation;
     this.isLoading = true;
     this.messageService.getMessagesForConversation(conversation._id).subscribe(response => {
-      // Update the message list for the selected conversation
       this.selectedConversationMessages = response.messages.sort(
-        (a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        (a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
       this.isLoading = false;
-      // Mark the messages in the conversation as read
-      this.messageService.markMessagesAsRead(conversation._id).subscribe(() => {
-        // Successfully marked as read
-        this.resetUnreadCount(conversation._id);
-        this.messageService.fetchUnreadMessageCount()
-      });
+      this.resetUnreadCount(conversation._id);
     }, error => {
       console.error('Error fetching messages:', error);
       this.isLoading = false;
     });
   }
-  
 
-  
-  
 
   onSendMessage() {
     if (this.messageForm.invalid) {

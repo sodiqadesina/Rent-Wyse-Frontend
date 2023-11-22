@@ -42,6 +42,15 @@ mat-paginator{
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
+
+button[mat-raised-button] {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: black;
+    color: aliceblue;
+}
+
 button[mat-icon-button] {
     position: absolute;
     top: 50%;
@@ -57,3 +66,18 @@ button[mat-icon-button]:nth-child(3) {
     right: 0;
 }
 
+
+
+
+
+.post-item {
+    margin-bottom: 20px;
+  }
+  
+  mat-icon {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  
+  /* Other styling as per your design preferences */
+  

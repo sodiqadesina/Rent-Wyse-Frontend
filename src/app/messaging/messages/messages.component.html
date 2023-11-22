@@ -22,7 +22,41 @@
         <!-- Messages Display -->
         <div class="col-md-8">
             <div *ngIf="selectedConversation">
-                <h3>Messages</h3>
+             <!-- Conversation Post Details Accordion -->
+              <mat-accordion class="post-details-accordion" multi *ngIf="selectedConversation?.postId">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ selectedConversation.postId.title }}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{ selectedConversation.postId.city }}, {{ selectedConversation.postId.province }}
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <!-- Image Slider -->
+                  <div class="slider-container" *ngIf="selectedConversation.postId.imagePath.length > 0">
+                    <img [src]="selectedConversation.postId.imagePath[currentImageIndex]" [alt]="selectedConversation.postId.title">
+                    <button mat-icon-button (click)="previousImage()"><mat-icon>chevron_left</mat-icon></button>
+                    <button mat-icon-button (click)="nextImage(selectedConversation.postId.imagePath.length)"><mat-icon>chevron_right</mat-icon></button>
+                  </div>
+
+                  <mat-card-content>
+                    <p><mat-icon>description</mat-icon> {{ selectedConversation.postId.description }}</p>
+                    <p><mat-icon>place</mat-icon> {{ selectedConversation.postId.address }}, {{ selectedConversation.postId.city }}, {{ selectedConversation.postId.province }}, {{ selectedConversation.postId.zipcode }}, {{ selectedConversation.postId.country }}</p>
+                    <p><mat-icon>king_bed</mat-icon> Bedrooms: {{ selectedConversation.postId.bedroom }}</p>
+                    <p><mat-icon>bathtub</mat-icon> Bathrooms: {{ selectedConversation.postId.bathroom }}</p>
+                    <p><mat-icon>event</mat-icon> Listed: {{ selectedConversation.postId.dateListed | date }}</p>
+                    <p><mat-icon>event_available</mat-icon> Available: {{ selectedConversation.postId.dateAvailableForRent | date }}</p>
+                    <p><mat-icon>check_circle_outline</mat-icon> Furnished: {{ selectedConversation.postId.furnished ? 'Yes' : 'No' }}</p>
+                    <p><mat-icon>directions_car</mat-icon> Parking: {{ selectedConversation.postId.parkingAvailable ? 'Available' : 'Not Available' }}</p>
+                    <p><mat-icon>house</mat-icon> Rent Type: {{ selectedConversation.postId.rentType }}</p>
+                  </mat-card-content>
+                </mat-expansion-panel>
+              </mat-accordion>
+
+
+                <h3 class="mt-4">Messages</h3>
                 <!-- messages.component.html -->
                 <mat-card>
                     <mat-spinner *ngIf="isLoading"></mat-spinner>
@@ -40,14 +74,71 @@
                   </mat-card>
          
                 <!-- Message Input Form -->
-                <mat-card>
-                <form [formGroup]="messageForm" (ngSubmit)="onSendMessage()" class="message-form">
-                    <mat-form-field appearance="outline" class="full-width-input">
-                        <textarea matInput placeholder="Type a message..." formControlName="content"></textarea>
-                    </mat-form-field>
-                    <button mat-raised-button  type="submit" [disabled]="messageForm.invalid || isLoading">Send</button>
+                <mat-card class="pb-2 mb-4">
+                  <form [formGroup]="messageForm" (ngSubmit)="onSendMessage()" class="message-form">
+                      <mat-form-field appearance="outline" class="full-width-input">
+                          <textarea matInput placeholder="Type a message..." formControlName="content"></textarea>
+                      </mat-form-field>
+                      <button mat-raised-button class="ms-3" type="submit" [disabled]="messageForm.invalid || isLoading">Send</button>
+                  </form>
+              </mat-card>
+
+              <div *ngIf="selectedConversation.viewingDate">
+                <h3> 
+                Viewing Date: {{ selectedConversation.viewingDate | date:'medium' }}
+                </h3>
+              </div>
+              <div *ngIf="!selectedConversation.viewingDate">
+                <h3>
+                No viewing date set.
+                </h3>
+              </div>
+              <mat-card class="mt-3 px-5 mb-3 pb-3">
+                <form [formGroup]="viewingDateForm" (ngSubmit)="onSetViewingDate()" *ngIf="isUserPostCreator()" class="mx-auto">
+                  <mat-form-field class="mx-4">
+                    <mat-label>Choose a date</mat-label>
+                      <input matInput [matDatepicker]="datePicker" formControlName="viewingDate">
+                      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #datePicker></mat-datepicker>
+                   </mat-form-field>
+                   <mat-form-field appearance="fill">
+                      <mat-label>Choose a time</mat-label>
+                      <input matInput type="time" formControlName="viewingTime">
+                   </mat-form-field>
+                  <button mat-raised-button class="mx-auto" type="submit">{{ selectedConversation.viewingDate ? 'Update' : 'Set' }} Viewing Date</button>
+               </form>
+              </mat-card>
+
+              <mat-card class="mt-3  mb-3 mx-auto">
+                <div class="mx-auto text-center">
+                  <h2>Agreement Document</h2>
+                  <div *ngIf="selectedConversation.agreementDocuments.length === 0">
+                    <p>No agreement document uploaded.</p>
+                  </div>
+                  <div *ngFor="let doc of selectedConversation.agreementDocuments" class="d-flex align-items-center mb-3">
+                    <a class="agremment" (click)="onDownloadDocument(doc)">{{ doc }}</a>
+                    <button mat-raised-button class="ms-3" *ngIf="isUserPostCreator()" (click)="onDeleteDocument(doc, 'agreementDocument')">Delete</button>
+                  </div>
+                </div>
+              
+                <div class="mx-auto text-center">
+                  <h2>Signed Agreement Document</h2>
+                  <div *ngIf="selectedConversation.signedAgreementDocuments.length === 0">
+                    <p>No signed agreement document uploaded.</p>
+                  </div>
+                  <div *ngFor="let doc of selectedConversation.signedAgreementDocuments" class="d-flex align-items-center mb-3">
+                    <a class="agremment" (click)="onDownloadDocument(doc)">{{ doc }}</a>
+                    <button mat-raised-button class="ms-3" *ngIf="isUserPostCreator()" (click)="onDeleteDocument(doc, 'signedAgreementDocument')">Delete</button>
+                  </div>
+                </div>
+              
+                <form [formGroup]="documentForm" class="mx-auto pt-4 pb-3" (ngSubmit)="onUploadDocuments()">
+                  <input type="file" formControlName="documents" multiple (change)="onFilePicked($event)">
+                  <button mat-raised-button type="submit">Upload Documents</button>
                 </form>
-            </mat-card>
+              </mat-card>
+              
+
             </div>
             <p class="info-text mat-body-1" *ngIf="!selectedConversation && !isLoading">Select a conversation to view messages</p>
         </div>

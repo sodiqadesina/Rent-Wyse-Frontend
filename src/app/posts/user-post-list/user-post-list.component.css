@@ -1,9 +1,11 @@
-:host{
+/* :host{
     display: block;
     margin-top: 1rem;
     
-}
-
+} */
+/* .post-container{
+    width: 80%;
+} */
 
 .info-text{
 
@@ -42,6 +44,9 @@ mat-paginator{
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
+
+
+
 button[mat-icon-button] {
     position: absolute;
     top: 50%;
@@ -57,3 +62,19 @@ button[mat-icon-button]:nth-child(3) {
     right: 0;
 }
 
+/* .post-container{
+    width: 80%;
+} */
+
+
+
+.post-item {
+    margin-bottom: 20px;
+  }
+  
+  mat-icon {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  
+  

@@ -50,10 +50,10 @@ ngOnInit(){
   })
 }
 
-openInquiryDialog(partnerId: string): void {
+openInquiryDialog(partnerId: string, postId:string): void {
   this.dialog.open(InquiryDialogComponent, {
     width: '250px',
-    data: { partnerId }
+    data: { partnerId, postId }
   });
 }
 
@@ -72,9 +72,6 @@ nextImage(postId: string, maxIndex: number) {
     }
 }
 
-
-
-
 onChangePage(pageData: PageEvent){
   this.isLoading = true;
   console.log(pageData)
@@ -83,7 +80,6 @@ onChangePage(pageData: PageEvent){
   this.postsService.getPosts(this.postPerPage, this.currentPage);
 
 }
-
 
 onDelete(postId: string){
   this.isLoading = true;
