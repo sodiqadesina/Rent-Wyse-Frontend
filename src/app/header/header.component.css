@@ -61,3 +61,9 @@ mat-toolbar{
         display: block;
     }
 }
+
+
+
+.active-link {
+    color: #ffc107 !important; /* Change color as needed */
+}

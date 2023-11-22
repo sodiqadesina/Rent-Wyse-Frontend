@@ -7,29 +7,29 @@
         <span class="spacer"></span>
         <ul class="nav-list">
             <li *ngIf="userIsAuth">
-                <a mat-button routerLink="/message" routerLinkActive="mat-accent">
+                <a mat-button routerLink="/message" routerLinkActive="active-link">
                     Messages
                     <span matBadge="{{ unreadMessageCount }}" matBadgeOverlap="false" *ngIf="unreadMessageCount > 0">
                       </span>
                 </a>
             </li>
                 <li *ngIf="userIsAuth">
-                    <a mat-button routerLink="/auth/settings" routerLinkActive="mat-accent">Settings</a>
+                    <a mat-button routerLink="/auth/settings" routerLinkActive="active-link">Settings</a>
                 </li>
                 <li *ngIf="userIsAuth">
-                    <a mat-button routerLink="/my-listing" routerLinkActive="mat-accent">My Rentals</a>
+                    <a mat-button routerLink="/my-listing" routerLinkActive="active-link">My Rentals</a>
                 </li>
                 <li *ngIf="userIsAuth">
-                    <a mat-button routerLink="/list" routerLinkActive="mat-accent">Rentals</a>
+                    <a mat-button routerLink="/list" routerLinkActive="active-link">Rentals</a>
                 </li>
             <li *ngIf="!userIsAuth">
-                <a mat-button routerLink="/auth/login" routerLinkActive="mat-accent">Login</a>
+                <a mat-button routerLink="/auth/login" routerLinkActive="active-link">Login</a>
             </li>
             <li *ngIf="!userIsAuth">
-                <a mat-button routerLink="/auth/signup" routerLinkActive="mat-accent">Signup</a>
+                <a mat-button routerLink="/auth/signup" routerLinkActive="active-link">Signup</a>
             </li>
             <li *ngIf="userIsAuth">
-                <button mat-button  (click)="onLogout()" routerLinkActive="mat-accent">Signout</button>
+                <button mat-button  (click)="onLogout()" routerLinkActive="active-link">Signout</button>
             </li>
         </ul>
         <button class="menu-icon" (click)="toggleNav()">
