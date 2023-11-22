@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class SocketService {
   private socket!: Socket;
-  private readonly serverUrl = 'https://rent-wyse-726bbcf52f8c.herokuapp.com';
+  private readonly serverUrl = 'https://rent-wyse-726bbcf52f8c.herokuapp.com'; // change to https://rent-wyse-726bbcf52f8c.herokuapp.com when pushing 
 
   constructor(private notificationService: NotificationService) {
     // Don't connect here
@@ -51,6 +51,10 @@ export class SocketService {
     this.socket.off('newMessage');
     console.log('Disconnected from WebSocket messageListener on logout');
 
+  }
+
+  public isConnected(): boolean {
+    return !!this.socket && this.socket.connected;
   }
 
   public disconnect(): void {

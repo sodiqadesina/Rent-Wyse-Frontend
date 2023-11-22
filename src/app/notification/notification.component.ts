@@ -35,6 +35,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       .subscribe(isAuthenticated => {
         if (isAuthenticated) {
           this.userId = this.authService.getUserId();
+          this.socketService.disconnect();
           //this.socketService.connect(this.userId);
           // this.socketService.onNewMessage((data) => {
           //   this.showNotifications(data);
@@ -47,10 +48,10 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (this.authService.getIsAuth()) {
       // If the user is already authenticated, establish the socket connection
       this.userId = this.authService.getUserId();
-      this.socketService.connect(this.userId);
-      this.socketService.onNewMessage((data) => {
-        this.showNotifications([data]);
-      });
+      // this.socketService.connect(this.userId);
+      // this.socketService.onNewMessage((data) => {
+      //   this.showNotifications([data]);
+      // });
     }
 
     this.messageSubscription = this.notificationService.newMessages$.subscribe(messages => {
@@ -98,7 +99,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
         }
       );
 
-      // Subscribe to the action observable for the snackbar
+      // Subscribing to the action observable for the snackbar
       snackBarRef.onAction().subscribe(() => {
         this.router.navigate(['/messages', notificationData.conversationId]);
       });

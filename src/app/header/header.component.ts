@@ -26,23 +26,33 @@ import { MessageService } from '../messaging/messaging.service';
     }
     
 
-    ngOnInit(){
+    ngOnInit() {
       this.userIsAuth = this.authService.getIsAuth();
-      this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated =>{
+    
+      // Subscribe to unread message count updates
+      this.messageService.getUnreadMessageCount().subscribe(count => {
+        this.unreadMessageCount = count;
+        console.log("unreadMessageCount:", count);
+      });
+    
+      // Subscribe to authentication status updates
+      this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
         this.userIsAuth = isAuthenticated;
-        if(isAuthenticated){
-          this.messageService.fetchUnreadMessageCount()
-          this.messageService.getUnreadMessageCount().subscribe(count => {
-          this.unreadMessageCount = count;
-          console.log("unreadmessage count " + count)
-          });
+        if (isAuthenticated) {
+          // Fetch the latest unread message count
+          this.messageService.fetchUnreadMessageCount();
         }
       });
-        
+    
+      // Initial fetch of unread message count if authenticated
+      if (this.userIsAuth) {
+        this.messageService.fetchUnreadMessageCount();
+      }
     }
+    
 
     onLogout(){
-      this.messageService.fetchUnreadMessageCount()
+      this.unreadMessageCount = 0; // Reset unread message count
       this.authService.logout();
     }
 
