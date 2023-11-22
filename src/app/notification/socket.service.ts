@@ -3,13 +3,15 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { NotificationService } from "../notification/notification.service";
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
   private socket!: Socket;
-  private readonly serverUrl = 'https://rent-wyse-726bbcf52f8c.herokuapp.com'; // change to https://rent-wyse-726bbcf52f8c.herokuapp.com when pushing 
+  private readonly serverUrl = environment.apiUrl; // change to https://rent-wyse-726bbcf52f8c.herokuapp.com when pushing 
 
   constructor(private notificationService: NotificationService) {
     // Don't connect here
