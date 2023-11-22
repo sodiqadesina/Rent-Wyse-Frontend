@@ -29,6 +29,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
   viewingDateSet: boolean = false;
   documentForm!: FormGroup;   
   fileList: FileList | null = null;
+  isViewingConversation = false; 
 
   constructor(
     private messageService: MessageService,
@@ -232,7 +233,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
           this.conversations[conversationIndex] = { ...conversation };
     
           // If the new message belongs to the selected conversation, update the message list
-          if (this.selectedConversation && message.conversationId === this.selectedConversation._id) {
+          if (this.isViewingConversation && this.selectedConversation && message.conversationId === this.selectedConversation._id) {
             this.selectConversation(this.selectedConversation); // Reload message
           }
         }
@@ -313,6 +314,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
 // messages.component.ts
   selectConversation(conversation: any) {
     this.selectedConversation = conversation;
+    this.isViewingConversation = true;
     this.isLoading = true;
     this.messageService.getMessagesForConversation(conversation._id).subscribe(response => {
       this.selectedConversationMessages = response.messages.sort(
@@ -382,6 +384,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
   ngOnDestroy() {
     // Clean up the subscription when the component is destroyed
     //this.socketService.disconnectMessageListener();; // Assuming you have implemented this method
+    this.isViewingConversation = false;
   }
 
 }
