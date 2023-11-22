@@ -1,9 +1,7 @@
 {
   "name": "rent-wyse",
   "version": "0.0.0",
-  "engines": {
-    "node": "18.16.1"
-  },
+  
   "scripts": {
 
     "ng": "ng",
@@ -11,7 +9,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "heroku-postbuild":"ng build --prod"
+    "heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {
@@ -48,5 +46,9 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.1.3"
+  },
+  "engines": {
+    "npm": "9.5.1",
+    "node": "18.16.1"
   }
 }
