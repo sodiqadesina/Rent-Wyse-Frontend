@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class SocketService {
   private socket!: Socket;
-  private readonly serverUrl = 'http://localhost:5500';
+  private readonly serverUrl = 'https://rent-wyse-726bbcf52f8c.herokuapp.com';
 
   constructor(private notificationService: NotificationService) {
     // Don't connect here
