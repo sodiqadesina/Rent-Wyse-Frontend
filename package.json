@@ -1,6 +1,9 @@
 {
   "name": "rent-wyse",
   "version": "0.0.0",
+  "engines": {
+    "node": "18.16.1"
+  },
   "scripts": {
 
     "ng": "ng",
