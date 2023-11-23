@@ -83,17 +83,18 @@
                   </form>
               </mat-card>
 
-              <div *ngIf="selectedConversation.viewingDate">
-                <h3> 
-                Viewing Date: {{ selectedConversation.viewingDate | date:'medium' }}
-                </h3>
-              </div>
-              <div *ngIf="!selectedConversation.viewingDate">
-                <h3>
-                No viewing date set.
-                </h3>
-              </div>
+              
               <mat-card class="mt-3 px-5 mb-3 pb-3">
+                <div *ngIf="selectedConversation.viewingDate">
+                  <h3> 
+                  Viewing Date: {{ selectedConversation.viewingDate | date:'medium' }}
+                  </h3>
+                </div>
+                <div *ngIf="!selectedConversation.viewingDate">
+                  <h3>
+                  No viewing date set.
+                  </h3>
+                </div>
                 <form [formGroup]="viewingDateForm" (ngSubmit)="onSetViewingDate()" *ngIf="isUserPostCreator()" class="mx-auto">
                   <mat-form-field class="mx-4">
                     <mat-label>Choose a date</mat-label>

@@ -108,7 +108,9 @@ private fetchAllPosts() {
 
 openInquiryDialog(partnerId: string, postId:string): void {
   this.dialog.open(InquiryDialogComponent, {
-    width: '250px',
+    width: '300px',
+    // height: 'auto',
+    // panelClass: 'custom-dialog-container',
     data: { partnerId, postId }
   });
 }
