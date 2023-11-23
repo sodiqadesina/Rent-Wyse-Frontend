@@ -12,6 +12,8 @@ import { MatNativeDateModule} from '@angular/material/core'
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {UserPostListComponent} from './user-post-list/user-post-list.component'
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
     declarations: [
@@ -30,6 +32,7 @@ import {UserPostListComponent} from './user-post-list/user-post-list.component'
         MatNativeDateModule,
         MatCheckboxModule,
         DragDropModule,
+        FormsModule,
     ]
 })
 

@@ -11,7 +11,7 @@ import { MessagesComponent } from './messaging/messages/messages.component';
 
 const routes: Routes = [
   {path: '',component: HomeComponent},
-  {path: 'list',component: PostListComponent},
+  {path: 'list',component: PostListComponent, canActivate: [AuthGuard] },
   {path: 'create',component: PostCreateComponent, canActivate: [AuthGuard]}, // using the AuthGuard to protect the route
   {path: 'edit/:postId',component: PostCreateComponent, canActivate: [AuthGuard]},
   {path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)} ,// Lazy loading the auth routes 

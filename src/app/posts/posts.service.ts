@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,8 +16,17 @@ export class PostsService {
 
     constructor(private http: HttpClient, private router: Router) {}
 
-    getPosts(postsPerPage: number, currentPage: number){
-        const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+    getPosts(postsPerPage: number, currentPage: number,city?: string, bedroom?: number, bathroom?: number, furnished?: boolean, parkingAvailable?: boolean, minPrice?: number, maxPrice?: number){
+        let queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+            if (city) queryParams += `&city=${city}`;
+            if (bedroom) queryParams += `&bedroom=${bedroom}`;
+            if (bathroom) queryParams += `&bathroom=${bathroom}`;
+            if (furnished) queryParams += `&furnished=${furnished}`;
+            if (parkingAvailable) queryParams += `&parkingAvailable=${parkingAvailable}`;
+            if (minPrice) queryParams += `&minPrice=${minPrice}`;
+            if (maxPrice) queryParams += `&maxPrice=${maxPrice}`;
+          
+
         this.http
             .get<{ message: string, posts: any[], maxPost: number }>(BACKEND_URL + queryParams)
             .pipe(map(postData => {
@@ -142,11 +151,11 @@ export class PostsService {
             //should redirect to the user list of posts page
             this.router.navigate(["/"]);
           });
-      }
+    }
 
 
 
-  updatePost(
+    updatePost(
     id: string, 
     title: string, 
     description: string, 
@@ -226,11 +235,23 @@ this.http.put(BACKEND_URL + id, postData).subscribe(response =>{
 // this.posts = updatedPosts;
 this.router.navigate(["/"]); // redirecting the route
 });
-}
+    }
 
     deletePost(postId: string) {
         return this.http.delete(BACKEND_URL + postId);
     }
 
-   
+    // searchPosts(city: string, bedroom?: number, bathroom?: number, furnished?: boolean, parkingAvailable?: boolean, minPrice?: number, maxPrice?: number): Observable<any> {
+    //     let params = new HttpParams();
+    //     if (city) params = params.append('city', city);
+    //     if (bedroom) params = params.append('bedroom', bedroom.toString());
+    //     if (bathroom) params = params.append('bathroom', bathroom.toString());
+    //     if (furnished !== undefined) params = params.append('furnished', furnished.toString());
+    //     if (parkingAvailable !== undefined) params = params.append('parkingAvailable', parkingAvailable.toString());
+    //     //price is missing
+
+    
+    //     return this.http.get(`${BACKEND_URL}/search-posts`, { params });
+    //   }
+
 }

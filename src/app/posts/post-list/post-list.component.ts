@@ -6,7 +6,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InquiryDialogComponent } from '../../messaging/Inquiry-dialog/inquiry-dialog.component';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-post-list',
@@ -26,14 +26,21 @@ export class PostListComponent implements OnInit, OnDestroy {
   private authStatusSub!: Subscription;
   userIsAuth = false;
   userId!: any;
+  filterCity = '';
+  filterBedroom!: number;
+  filterBathroom!: number;
+  filterFurnished!: boolean;
+  filterParkingAvailable!: boolean;
+  filterMinPrice!: number;
+  filterMaxPrice!: number;
 
 
-  constructor(public postsService: PostsService, private authService: AuthService, public dialog: MatDialog){}
+  constructor(public postsService: PostsService, private authService: AuthService, public dialog: MatDialog, private route: ActivatedRoute){}
 
 
 ngOnInit(){
   this.isLoading = true;
-  this.postsService.getPosts(this.postPerPage, this.currentPage);
+  // this.postsService.getPosts(this.postPerPage, this.currentPage,);
   this.userId = this.authService.getUserId();
   this.postsSub = this.postsService.getPostUpdateListener().subscribe((postData: {posts: post[], postCount: number}) => {
     this.isLoading = false;
@@ -48,7 +55,56 @@ ngOnInit(){
     this.userId = this.authService.getUserId();
     console.log(this.userId)
   })
+
+  //Handling paramited  reroute
+  this.route.queryParams.subscribe(params => {
+    const city = params['city'];
+    if (city) {
+      this.filterCity = city;
+      this.fetchPostsFilteredByCity(city);
+    } else {
+      this.fetchAllPosts();
+    }
+  });
 }
+
+applyFilters() {
+  this.isLoading = true;
+  this.postsService.getPosts(
+    this.postPerPage, 
+    this.currentPage, 
+    this.filterCity, 
+    this.filterBedroom,
+    this.filterBathroom,
+    this.filterFurnished,
+    this.filterParkingAvailable,
+    this.filterMinPrice,
+    this.filterMaxPrice
+  );
+}
+
+
+private fetchPostsFilteredByCity(city: string) {
+  // Call your service method to fetch posts filtered by the city
+  this.postsService.getPosts(this.postPerPage, this.currentPage, city);
+
+}
+
+private fetchAllPosts() {
+  // Existing code to fetch all posts
+  this.postsService.getPosts(this.postPerPage, this.currentPage);
+
+}
+
+
+
+
+
+
+
+
+
+
 
 openInquiryDialog(partnerId: string, postId:string): void {
   this.dialog.open(InquiryDialogComponent, {

@@ -1,3 +1,38 @@
+
+<mat-card class="filter-card">
+  <h2 class="filter-title">Search Filters</h2>
+  <div class="filter-form">
+    <mat-form-field>
+      <input matInput placeholder="City" [(ngModel)]="filterCity">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Bedrooms" [(ngModel)]="filterBedroom">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Bathrooms" [(ngModel)]="filterBathroom">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Furnished" [(ngModel)]="filterFurnished">
+        <mat-option value="true">Yes</mat-option>
+        <mat-option value="false">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Parking Available" [(ngModel)]="filterParkingAvailable">
+        <mat-option value="true">Yes</mat-option>
+        <mat-option value="false">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Min Price" [(ngModel)]="filterMinPrice">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder="Max Price" [(ngModel)]="filterMaxPrice">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="applyFilters()">Search</button>
+  </div>  
+</mat-card>
+
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
 <div *ngIf="posts.length > 0 && !isLoading" class="post-container">

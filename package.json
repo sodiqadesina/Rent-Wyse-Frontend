@@ -1,9 +1,7 @@
 {
   "name": "rent-wyse",
   "version": "0.0.0",
-  
   "scripts": {
-
     "ng": "ng",
     "start": "node server.js",
     "build": "ng build",
@@ -38,6 +36,7 @@
     "@angular/cli": "~16.2.0",
     "@angular/compiler-cli": "^16.2.0",
     "@angular/localize": "^16.2.0",
+    "@types/googlemaps": "^3.43.3",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",

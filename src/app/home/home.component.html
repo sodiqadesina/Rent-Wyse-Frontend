@@ -1,3 +1,6 @@
+
+
+
 <div class=" home-container  d-flex flex-column justify-content-between">
     
     <div class="post-btn">
@@ -19,7 +22,7 @@
                 <mat-icon matSuffix>search</mat-icon>
             </span>
         </div>
-        <input type="text" class="form-control border-left-0" placeholder="Search City, Neighbourhood, Address" aria-label="Search" aria-describedby="basic-addon1">
+        <input id="autocomplete" type="text" class="form-control" placeholder="Search City, Neighbourhood, Address">
         </div>
     </div>
     </div>
@@ -33,7 +36,7 @@
     
     <div class="row popular-cities ">
         <div class="col-md-4 mb-4" *ngFor="let city of ['Toronto', 'Mississauga', 'Brampton']">
-            <a class="city-card d-block text-center p-4 h-100" [routerLink]="['/city', city.toLowerCase()]">
+            <a class="city-card d-block text-center p-4 h-100" (click)="onCitySelected(city.toLowerCase())">
                 <p>{{ city }}</p>
                 <img [src]="'../../assets/' + city.toLowerCase() + '.svg'" alt="{{ city }}" class="img-fluid mb-3">
             </a>
