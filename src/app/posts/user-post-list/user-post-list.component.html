@@ -2,11 +2,10 @@
 <div class="post-btn">
   <a routerLink="/create" class="btn badge text-wrap  mb-3 post-rental-btn">Post a Rental</a>
 </div>
-
+<mat-spinner *ngIf="isLoading"></mat-spinner>
 <div *ngIf="posts.length > 0 && !isLoading" class="container mt-4">
 <h1>My Listing</h1>
   <mat-accordion class="posts-accordion" multi>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
     <mat-expansion-panel *ngFor="let post of posts">
       <mat-expansion-panel-header>
         <mat-panel-title>
