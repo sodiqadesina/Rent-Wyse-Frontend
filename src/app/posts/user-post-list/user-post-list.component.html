@@ -1,6 +1,11 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-<div *ngIf="posts.length > 0 && !isLoading" class="container">
+<div class="post-btn">
+  <a routerLink="/create" class="btn badge text-wrap  mb-3 post-rental-btn">Post a Rental</a>
+</div>
+
+<div *ngIf="posts.length > 0 && !isLoading" class="container mt-4">
+<h1>My Listing</h1>
   <mat-accordion class="posts-accordion" multi>
     <mat-expansion-panel *ngFor="let post of posts">
       <mat-expansion-panel-header>
@@ -12,7 +17,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div class="slider-container mb-4" *ngIf="post.imagePath.length > 0">
+      <div class="slider-container mb-4 mt-2" *ngIf="post.imagePath.length > 0">
         <img [src]="post.imagePath[currentImageIndices[post._id] || 0]" [alt]="post.title">
         <button mat-icon-button (click)="previousImage(post._id)"><mat-icon>arrow_left</mat-icon></button>
         <button mat-icon-button (click)="nextImage(post._id, post.imagePath.length)"><mat-icon>arrow_right</mat-icon></button>

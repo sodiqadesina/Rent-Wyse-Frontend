@@ -77,4 +77,35 @@ button[mat-icon-button]:nth-child(3) {
     margin-right: 8px;
   }
   
-  
+  .post-btn{
+    margin: 40px;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .post-rental-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #000000; /* Yellow color from the design */
+    border: none;
+    border-radius: 30px;  /* Gives the rounded corners */
+    font-size: 16px;
+    font-weight: bold;
+    color: #F0BB00; /* Black text color */
+    cursor: pointer;
+    transition: transform 0.2s; /* For a smooth hover effect */
+    text-decoration: none;
+    width: 25%;
+    font-family: sans-serif;
+}
+
+/* Hover effect to slightly enlarge the button */
+.post-rental-btn:hover {
+    transform: scale(1.05);
+}
+
+
+.post-rental-btn:active {
+    transform: scale(1);
+    color: #F0BB00; /* Black text color */
+    background-color: #000000; /* Slightly darker yellow for a pressed effect */
+}

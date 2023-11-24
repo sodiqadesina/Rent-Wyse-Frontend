@@ -9,11 +9,14 @@ import { MatListModule } from '@angular/material/list';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import {ConfirmationDialogComponent} from "./messages/delete-confirmation.component"
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
 declarations: [
     InquiryDialogComponent,
     MessagesComponent,
+    ConfirmationDialogComponent
 ],
 imports: [
 CommonModule,
@@ -24,7 +27,7 @@ MatListModule,
 ReactiveFormsModule,
 MatBadgeModule,
 MatDatepickerModule,
-
+MatDialogModule,
 ]
 
 })

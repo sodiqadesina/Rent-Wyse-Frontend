@@ -149,7 +149,7 @@ export class PostsService {
 
             console.log(postData)
             //should redirect to the user list of posts page
-            this.router.navigate(["/"]);
+            this.router.navigate(["/my-listing"]);
           });
     }
 

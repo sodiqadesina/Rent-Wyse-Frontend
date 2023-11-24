@@ -8,6 +8,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SocketService } from 'src/app/notification/socket.service';
 import { docTypeValidator } from './doc-type.validator';
+import { ConfirmationDialogComponent1 } from 'src/app/auth/settings/confirmation-dialog.component';
+import { MatDialog ,MatDialogRef, MAT_DIALOG_DATA  } from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from "./delete-confirmation.component"
 
 @Component({
   selector: 'app-messages',
@@ -38,8 +41,8 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
     private datePipe: DatePipe, // Injecting DatePipe here
     private route: ActivatedRoute, // Injecting ActivatedRoute here
     private socketService: SocketService,
-    private formBuilder: FormBuilder
-
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
   ) {
     this.messageForm = this.fb.group({ // Initialize the form group
       content: ['', Validators.required] // Add validators as needed
@@ -73,21 +76,48 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
       
 
       onDeleteDocument(filename: string, documentType: 'agreementDocument' | 'signedAgreementDocument') {
-        // Call service to delete the document
-        this.messageService.deleteDocument(this.selectedConversation._id, filename)
-          .subscribe(response => {
-            // Handle successful deletion
-            console.log('Document deleted:', response);
-            // Remove the document from the UI
-            if (documentType === 'agreementDocument') {
-              this.selectedConversation.agreementDocuments = this.selectedConversation.agreementDocuments.filter((doc: string) => doc !== filename);
-            } else {
-              this.selectedConversation.signedAgreementDocuments = this.selectedConversation.signedAgreementDocuments.filter((doc: string) => doc !== filename);
-            }
-          }, error => {
-            // Handle deletion error
-            console.log(error)
-          });
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+          width: '300px',
+          data: {
+            title: 'Confirm Deletion',
+            message: 'Are you sure you want to delete this document?'
+          }
+        });
+
+
+        dialogRef.afterClosed().subscribe(confirmed => {
+          if (confirmed) {
+            // User confirmed the deletion
+            // Call service to delete the document
+            this.messageService.deleteDocument(this.selectedConversation._id, filename)
+            .subscribe(response => {
+              // Handle successful deletion
+              console.log('Document deleted:', response);
+              // Remove the document from the UI
+              if (documentType === 'agreementDocument') {
+                this.selectedConversation.agreementDocuments = this.selectedConversation.agreementDocuments.filter((doc: string) => doc !== filename);
+              } else {
+                this.selectedConversation.signedAgreementDocuments = this.selectedConversation.signedAgreementDocuments.filter((doc: string) => doc !== filename);
+              }
+
+              const dialogRef = this.dialog.open(ConfirmationDialogComponent1, {
+                data: { title: 'Document Delete Update', message: 'Your Document was Deleted successfully!' }
+              });
+        
+              // Handle the dialog close event
+              dialogRef.afterClosed().subscribe(() => {
+                // Redirect or perform other actions
+                // this.router.navigate(["/auth/settings"]);
+              });
+              
+            }, error => {
+              // Handle deletion error
+              console.log(error)
+            });
+              }
+        });
+
+        
       }
       
     
@@ -132,8 +162,15 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
                     // Update the UI with the new viewing date
                     this.updateViewingDate(this.selectedConversation._id, new Date(viewingDate));
 
-                    // Optionally, refresh other parts of the UI that depend on this data
-                    // ...
+                    const dialogRef = this.dialog.open(ConfirmationDialogComponent1, {
+                      data: { title: 'User Profile Update', message: 'Your viewing date was set successfully!' }
+                    });
+              
+                    // Handle the dialog close event
+                    dialogRef.afterClosed().subscribe(() => {
+                      // Redirect or perform other actions
+                      // this.router.navigate(["/auth/settings"]);
+                    });
 
                 }, error => {
                     // Handle error
@@ -175,6 +212,17 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
         this.selectedConversation.signedAgreementDocuments.push(...response.documentPaths);
       }
 
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent1, {
+        data: { title: 'Document Upload Update', message: 'Your Document was uploaded successfully!' }
+      });
+
+      // Handle the dialog close event
+      dialogRef.afterClosed().subscribe(() => {
+        // Redirect or perform other actions
+        // this.router.navigate(["/auth/settings"]);
+      });
+
+    
       // Clear the file input
       this.fileList = null;
       this.documentForm.reset();
