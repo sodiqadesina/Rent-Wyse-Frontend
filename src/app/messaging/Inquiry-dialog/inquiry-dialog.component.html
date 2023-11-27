@@ -1,12 +1,11 @@
 <!-- inquiry-dialog.component.html -->
-
-  <mat-dialog-content class="mat-typography">
-    <h2 mat-dialog-title>Make an Inquiry</h2>
-      <mat-form-field>
+<h2 mat-dialog-title>Make an Inquiry</h2>
+  <div mat-dialog-content class="mat-typography">
+      <div mat-form-field>
         <textarea matInput placeholder="Your message" [(ngModel)]="messageContent"></textarea>
-      </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
+      </div>
+    </div>
+    <div mat-dialog-actions align="end">
       <button mat-button (click)="onSend()">Send</button>
-    </mat-dialog-actions>
+    </div>
 

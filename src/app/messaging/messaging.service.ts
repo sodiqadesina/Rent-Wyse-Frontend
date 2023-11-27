@@ -10,6 +10,7 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root'
 })
 export class MessageService {
+
   private BACKEND_URL =    environment.apiUrl; 
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -83,5 +84,22 @@ fetchUnreadMessageCount(): void {
     });
 }
   
+//payment
+
+
+// // Method to initiate PayPal transaction
+// createPayPalTransaction(conversationId: string): Observable<any> {
+//   return this.http.post(`${this.BACKEND_URL}/conversations/create-paypal-transaction`, { conversationId });
+// }
+
+// // Method to update payment status
+// updatePaymentStatus(conversationId: string): Observable<any> {
+//   return this.http.patch(`${this.BACKEND_URL}/conversations/${conversationId}/update-payment-status`, {});
+// }
+
+
+
+
+
 
 }

@@ -1,7 +1,7 @@
 // messages.component.ts
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, AfterViewInit, OnDestroy } from '@angular/core';
 import { MessageService } from '../messaging.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +11,13 @@ import { docTypeValidator } from './doc-type.validator';
 import { ConfirmationDialogComponent1 } from 'src/app/auth/settings/confirmation-dialog.component';
 import { MatDialog ,MatDialogRef, MAT_DIALOG_DATA  } from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from "./delete-confirmation.component"
+
+declare global {
+  interface Window {
+    paypal: any;  
+  }
+}
+
 
 @Component({
   selector: 'app-messages',
@@ -33,6 +40,11 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
   documentForm!: FormGroup;   
   fileList: FileList | null = null;
   isViewingConversation = false; 
+  renegotiationForm!: FormGroup;
+  renegotiatedPrice: number = 5;
+
+
+
 
   constructor(
     private messageService: MessageService,
@@ -70,9 +82,61 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
             this.documentForm = this.formBuilder.group({
               documents: [null, [docTypeValidator(['pdf', 'doc', 'docx'])]]
             });
+
+            this.renegotiationForm = new FormGroup({
+              price: new FormControl(null, [Validators.required, Validators.min(1)])
+            });
       }
 
 
+            
+      // initiatePayPalTransaction() {
+      //   if (this.selectedConversation && this.selectedConversation._id) {
+      //     this.messageService.createPayPalTransaction(this.selectedConversation._id)
+      //       .subscribe(response => {
+      //         if (response && response.approvalUrl) {
+      //           // Redirect the user to the PayPal approval URL
+      //           window.open(response.approvalUrl, '_blank');
+      //         } else {
+      //           console.error('No approval URL received');
+      //         }
+      //       }, error => {
+      //         console.error('Error creating PayPal transaction', error);
+      //       });
+      //   }
+      // }
+
+      // handlePaymentSuccess() {
+      //   if (this.selectedConversation && this.selectedConversation._id) {
+      //     this.messageService.updatePaymentStatus(this.selectedConversation._id)
+      //       .subscribe(() => {
+      //         // Handle successful payment status update
+      //         console.log('Payment status updated successfully');
+      //       }, error => {
+      //         console.error('Error updating payment status', error);
+      //       });
+      //   }
+      // }
+      
+      
+      
+      
+
+
+
+
+      onRenegotiatePrice() {
+        if (this.renegotiationForm.valid) {
+          const basePrice = this.renegotiationForm.value.price;
+          const serviceCharge = 0.10 * basePrice; // 10% service charge
+          this.renegotiatedPrice = basePrice + serviceCharge;
+    
+          // Here you can also update the 'Renegotiated price' in the conversation properties
+          // and make an API call to save this information.
+        }
+      }
+
+      
       
 
       onDeleteDocument(filename: string, documentType: 'agreementDocument' | 'signedAgreementDocument') {
@@ -370,6 +434,7 @@ export class MessagesComponent implements OnInit, AfterViewChecked, OnDestroy{
       );
       this.isLoading = false;
       this.resetUnreadCount(conversation._id);
+      // this.renderPayPalButton();
     }, error => {
       console.error('Error fetching messages:', error);
       this.isLoading = false;

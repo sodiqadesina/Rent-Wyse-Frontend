@@ -138,6 +138,28 @@
                   <button mat-raised-button type="submit">Upload Documents</button>
                 </form>
               </mat-card>
+
+              <!-- <mat-card class="mt-3  mb-3 mx-auto">
+                <div *ngIf="isUserPostCreator()">
+                  <form [formGroup]="renegotiationForm" (ngSubmit)="onRenegotiatePrice()">
+                    <mat-form-field>
+                      <input matInput placeholder="Enter New Price" formControlName="price">
+                    </mat-form-field>
+                    <button mat-raised-button type="submit">Renegotiate Price</button>
+                  </form>
+                  <p *ngIf="renegotiatedPrice">Total with Service Charge: ${{ renegotiatedPrice }}</p>
+                </div>
+                
+                <div *ngIf="!isUserPostCreator()">
+                  <h1>payment</h1>
+                  <button *ngIf="!isUserPostCreator() && !selectedConversation.paymentStatus"
+                    (click)="initiatePayPalTransaction()"
+                    class="paypal-button">
+                    Make payment
+                  </button>
+                </div>
+
+              </mat-card> -->
               
 
             </div>
