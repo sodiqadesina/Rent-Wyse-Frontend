@@ -67,6 +67,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   showNotifications(messages: any[]) {
     // Check each message and add it to the queue if it's not already present
     this.messageService.fetchUnreadMessageCount()
+    console.log('messages in showNotifiaction count = '+ messages.length)
     messages.forEach((message) => {
       const isAlreadyQueued = this.notificationQueue.some(
         (queuedMessage) => queuedMessage.conversationId === message.conversationId && queuedMessage.message === message.message
@@ -76,6 +77,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
         this.notificationQueue.push(message);
       }
     });
+
   
     // If the snackbar is not currently active, display the next notification
     if (!this.isSnackbarActive) {
@@ -88,7 +90,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (this.notificationQueue.length > 0) {
       this.isSnackbarActive = true;
       const notificationData = this.notificationQueue.shift();
-      console.log(notificationData)
+      // console.log(notificationData)
       // Open the snackbar and save the reference to it
       const snackBarRef: MatSnackBarRef<SimpleSnackBar> = this.snackBar.open(
         `${notificationData.senderUsername}: ${notificationData.message}`, 'View', {
@@ -107,7 +109,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
       // After the snackbar is dismissed, display the next notification
       snackBarRef.afterDismissed().subscribe(() => {
         this.isSnackbarActive = false;
+        if(this.notificationQueue.length > 1){
         this.displayNextNotification();
+        }
       });
     }
   }
