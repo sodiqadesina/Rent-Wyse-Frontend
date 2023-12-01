@@ -4,7 +4,7 @@
 </div>
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 <div *ngIf="posts.length > 0 && !isLoading" class="container mt-4">
-<h1>My Listing</h1>
+<h1>My Listings</h1>
   <mat-accordion class="posts-accordion" multi>
     <mat-expansion-panel *ngFor="let post of posts">
       <mat-expansion-panel-header>

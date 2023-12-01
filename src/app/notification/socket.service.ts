@@ -15,7 +15,7 @@ export class SocketService {
 
   constructor(private notificationService: NotificationService) {
     // Don't connect here
-  }
+  } 
 
   public connect(userId: string): void {
     if (!userId) {

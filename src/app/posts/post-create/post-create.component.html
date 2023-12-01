@@ -15,7 +15,7 @@
               <button type="button" class="remove-img-btn" (click)="removeImage(img)">×</button>
             </div>
           </div>
-          <mat-error *ngIf="form.get('image')?.invalid">Please upload some images</mat-error>          
+          <mat-error *ngIf="form.get('image')?.invalid">Please upload up to 10 images</mat-error>          
       </div>
   
       <mat-form-field>
@@ -69,13 +69,14 @@
       </mat-form-field>
   
       <mat-form-field>
+        <input matInput type="text" placeholder="Address" formControlName="address" #addressInput>
+        <mat-error *ngIf="form.get('address')?.invalid">Please enter an address</mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field>
         <input matInput type="text" formControlName="city" placeholder="City">
         <mat-error *ngIf="form.get('city')?.invalid">Please enter a city</mat-error>
-      </mat-form-field>
-  
-      <mat-form-field>
-        <input matInput type="text" formControlName="address" placeholder="Address">
-        <mat-error *ngIf="form.get('address')?.invalid">Please enter an address</mat-error>
       </mat-form-field>
   
       <mat-form-field>
