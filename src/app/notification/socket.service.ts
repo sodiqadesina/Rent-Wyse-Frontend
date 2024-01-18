@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class SocketService {
   private socket!: Socket;
-  private readonly serverUrl = "https://rent-wyse-726bbcf52f8c.herokuapp.com"; // change to https://rent-wyse-726bbcf52f8c.herokuapp.com when pushing 
+  private readonly serverUrl = "https://rent-wyse-backend.azurewebsites.net"; // change to https://rent-wyse-726bbcf52f8c.herokuapp.com when pushing 
 
   constructor(private notificationService: NotificationService) {
     // Don't connect here
